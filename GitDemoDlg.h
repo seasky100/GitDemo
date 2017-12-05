@@ -58,5 +58,9 @@ public:
 	static void XferCallback_1(SapXferCallbackInfo * pInfo);
 	afx_msg void OnBnClickedOk();
 	afx_msg void OnBnClickedCancel();
-
+	FILE *m_pfLog_1;
+	unsigned long m_ulTriggerNumber_1;
+	unsigned long m_ulSaveNumber_1;
+	bool m_bDirectoryExists_1;
+	char* m_cSavePath_1;
 };

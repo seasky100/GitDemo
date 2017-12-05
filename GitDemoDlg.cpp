@@ -53,6 +53,10 @@ CGitDemoDlg::CGitDemoDlg(CWnd* pParent /*=NULL*/)
 	, m_dbSpeed(0)
 	, m_dbVoltage_1(0)
 	, m_dbVoltage_2(0)
+	, m_ulTriggerNumber_1(0)
+	,m_pfLog_1(NULL)
+	, m_ulSaveNumber_1(0)
+	, m_bDirectoryExists_1(false)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
@@ -156,6 +160,18 @@ BOOL CGitDemoDlg::OnInitDialog()
    m_ImageWnd_1.Reset();
 
    FitToWindow(m_View_1);
+   CString m_strLeftPath;
+   m_strLeftPath="D:\\";
+   m_cSavePath_1=m_strLeftPath.GetBuffer();
+
+    SYSTEMTIME time;
+	::GetLocalTime(&time);
+   	//if(m_pfLog_1 == NULL)
+	//{	
+	//	str.Format("L%d%02d%02d%02d%02d%02d%03d.log",time.wYear,time.wMonth,time.wDay,time.wHour,time.wMinute,time.wSecond,time.wMilliseconds);
+	//	m_pfLog_1 = _tfopen(str,_T("wb"));
+	//	//m_pfLog_1 = fopen("D:\\Leftlog.log","wb");
+	//}
 
 	//if(m_SerialPortOne.InitPort(this,1,9600,'N',8,1,EV_RXCHAR|EV_CTS,512))
 	//{
@@ -206,8 +222,8 @@ void CGitDemoDlg::FitToWindow(SapView *pView)
 
 	scaleWidthFactor = 100.0f * scaleWidth / pView->GetBuffer()->GetWidth();
 	scaleHeightFactor= 100.0f * scaleHeight / pView->GetBuffer()->GetHeight();
-	scaleWidthFactor=23.584;
-	scaleHeightFactor=25.5859;
+	scaleWidthFactor=(float)23.584;
+	scaleHeightFactor=(float)25.5859;
 	pView->SetScalingMode( scaleWidthFactor/100.0f, scaleHeightFactor/100.0f);
 	UpdateData( FALSE);
 
@@ -329,6 +345,11 @@ void CGitDemoDlg::OnDestroy()
 	if (m_Buffers_1)		delete m_Buffers_1;
 	if (m_AcqDevice_1)	delete m_AcqDevice_1;
 
+	if(m_pfLog_1)
+	{
+		fclose(m_pfLog_1);
+		m_pfLog_1 = NULL;
+	}
 }
 
 BOOL CGitDemoDlg::CreateObjects_1()
@@ -436,6 +457,46 @@ BOOL CGitDemoDlg::DestroyObjects_1()
 void CGitDemoDlg::XferCallback_1(SapXferCallbackInfo * pInfo)
 {
 	CGitDemoDlg *pDlg= (CGitDemoDlg *) pInfo->GetContext();
+
+		int iImageType = 0;
+    void *pImageData_1 = NULL;
+    BOOL iSucceed = 0;
+    SapBuffer *pBuffer_1 = NULL;
+	char ch_ImageFileName_1[1024];
+	int iCount = 0;
+	time_t start;
+	time_t end;
+	double timeSpace;
+	
+    //pDlg->m_View_1->Show();
+
+	pBuffer_1 = pDlg->m_Buffers_1;
+
+   pDlg->m_ulTriggerNumber_1++;
+   iSucceed = (pBuffer_1->GetAddress(&pImageData_1));
+   if(iSucceed)
+   {
+	   if(!pDlg->m_bDirectoryExists_1)
+		{
+			//判断目录是否存在,如果不存在就创建目录
+			pDlg->m_bDirectoryExists_1=true;
+			ZLBCreateDirectory(pDlg->m_cSavePath_1);
+		}
+		start = clock();
+		sprintf_s(ch_ImageFileName_1,1024,"%s\\%08d.bmp",pDlg->m_cSavePath_1,++pDlg->m_ulSaveNumber_1);
+		pBuffer_1->Save(ch_ImageFileName_1,"-format bmp");
+		end = clock();
+		timeSpace =(double)(end - start);
+		if(pDlg->m_pfLog_1 != NULL)
+		{
+			pDlg->m_ulSaveNumber_1++;
+			SYSTEMTIME time;
+			::GetLocalTime(&time);
+			fprintf(pDlg->m_pfLog_1,"L:%d-%d-%d %d:%d:%d.%d tcount=%d acount=%d time=%f\r\n",time.wYear,time.wMonth,time.wDay,time.wHour,time.wMinute,time.wSecond,time.wMilliseconds,pDlg->m_ulTriggerNumber_1,pDlg->m_ulSaveNumber_1,timeSpace);
+		}
+
+		pBuffer_1->ReleaseAddress(&pImageData_1);
+   }
 }
 
 
