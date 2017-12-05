@@ -23,5 +23,6 @@ public:
 	SapTransfer		*m_Xfer_1;
 	SapView        *m_View_1;
 	int GetCameraCount(void);
+
 };
 

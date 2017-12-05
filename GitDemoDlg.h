@@ -58,4 +58,5 @@ public:
 	static void XferCallback_1(SapXferCallbackInfo * pInfo);
 	afx_msg void OnBnClickedOk();
 	afx_msg void OnBnClickedCancel();
+
 };

@@ -155,7 +155,7 @@ BOOL CGitDemoDlg::OnInitDialog()
    m_ImageWnd_1.CenterImage();
    m_ImageWnd_1.Reset();
 
-	FitToWindow(m_View_1);
+   FitToWindow(m_View_1);
 
 	//if(m_SerialPortOne.InitPort(this,1,9600,'N',8,1,EV_RXCHAR|EV_CTS,512))
 	//{

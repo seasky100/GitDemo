@@ -13,6 +13,7 @@
 **
 **
 */   
+
 #include "stdafx.h"
 #include "SerialPort.h"
 #include   <afxpriv.h>
