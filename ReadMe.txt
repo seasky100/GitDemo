@@ -1,31 +1,31 @@
-1,ÆäÖÐÊ¹ÓÃCSerialPortÀàÌí¼ÓºóÌáÊ¾ 
-´íÎó:error C2664: ¡°CreateFileW¡±: ²»ÄÜ½«²ÎÊý 1 ´Ó¡°char *¡±×ª»»Îª¡°LPCWSTR¡±
-½â¾ö1:ÏîÄ¿ÊôÐÔ¡ª¡µÅäÖÃÊôÐÔ¡ª¡µ³£¹æ¡ª¡µ×Ö·û¼¯¡ª¡µ¶à×Ö½Ú×Ö·û¼¯
-½â¾ö2:ÀûÓÃÀàÐÍÇ¿ÖÆ×ª»»£¬¼´ÔÚ²ÎÊý1Ç°¼ÓÉÏ(LPCWSTR)»òreinterpret_cast<LPCWSTR>(±í´ïÊ½)
-      À©Õ¹£ºC++ ÐÂµÄÀàÐÍ×ª»»²Ù×÷·û static_cast, const_cast, dynamic_cast, ºÍreinterpret_cast¡£
+ï»¿1,å…¶ä¸­ä½¿ç”¨CSerialPortç±»æ·»åŠ åŽæç¤º 
+é”™è¯¯:error C2664: â€œCreateFileWâ€: ä¸èƒ½å°†å‚æ•° 1 ä»Žâ€œchar *â€è½¬æ¢ä¸ºâ€œLPCWSTRâ€
+è§£å†³1:é¡¹ç›®å±žæ€§â€”ã€‰é…ç½®å±žæ€§â€”ã€‰å¸¸è§„â€”ã€‰å­—ç¬¦é›†â€”ã€‰å¤šå­—èŠ‚å­—ç¬¦é›†
+è§£å†³2:åˆ©ç”¨ç±»åž‹å¼ºåˆ¶è½¬æ¢ï¼Œå³åœ¨å‚æ•°1å‰åŠ ä¸Š(LPCWSTR)æˆ–reinterpret_cast<LPCWSTR>(è¡¨è¾¾å¼)
+      æ‰©å±•ï¼šC++ æ–°çš„ç±»åž‹è½¬æ¢æ“ä½œç¬¦ static_cast, const_cast, dynamic_cast, å’Œreinterpret_castã€‚
 
-2,CSerialPortÀàÖÐ³ö´í
-´íÎó:Run-Time Check Failure #3 - The variable 'comstat' is being used without being initialized.
-½â¾ö1:Ò»ÖÖ½â¾ö·½°¸ÊÇ¸Ä±ä»ù±¾ÔËÐÐÊ±¼ì²é£¨changing the runtime checks in project settings£©£ºÔÚ²Ëµ¥Project£­>Project properties-> C/C++ -> Code generation-> Basic Runtime checks --> change to 'Default'£¬ÔÚÖÐÎÄ°æÖÐÊÇ£ºÏîÄ¿-¡µÊôÐÔ-¡µÅäÖÃÊôÐÔ-¡µC/C++-¡µ´úÂëÉú³É-¡µ»ù±¾ÔËÐÐÊ±¼ì²é-¡µÉèÖÃÎªÄ¬ÈÏ£¬µ±½«»ù±¾ÔËÐÐÊ±¼ì²é¸ÄÎªÄ¬ÈÏÖ®ºó£¬±àÒë×ÔÈ»Ë³ÀûÍ¨¹ýÁË£¬Ïò´®¿Úµ÷ÊÔÖúÊÖ·¢ËÍÏûÏ¢Õý³£ÁË£¬ÔÙ´Ó´®¿Úµ÷ÊÔÖúÊÖÏòSerialPortTest·¢ËÍÏûÏ¢Ê±£¬Ò²Õý³£ÁË¡£
-½â¾ö2:ÁíÒ»ÖÖ½â¾ö·½°¸ÊÇ½«CSerialPort.CPPÖÐµÄCOMSTAT comstat;¸ÄÎªstatic COMSTAT comstat;ÕâÑù¸ÄÁËÖ®ºó£¬debugË³ÀûÍ¨¹ý£¬È»ºóµ÷ÊÔ£¬Óë´®¿Úµ÷ÊÔÖúÊÖÏà»¥·¢ÏûÏ¢¶¼£Ï£ËÁË¡£ÎªÊ²Ã´ÕâÑù¾ÍÄÜ½â¾öÄØ£¿ÆäÊµµ±ÄãÊ¹ÓÃdebug½â¾ö·½°¸Ê±£¬ËüµÄ»ù±¾ÔËÐÐÊ±¼ì²é³õÊ¼ÉèÖÃÎª£ºÁ½Õß(/RTC1£¬µÈÍ¬ÓÚ /RTCsu)£¬Õâ¸öÁ½ÕßÊÇÖ¸£º¶ÑÕ»Ö¡(/RTCs)£¬Î´³õÊ¼»¯µÄ±äÁ¿(/RTCu)¡£ÓÉÓÚËüÒª¼ì²éÎ´³õÊ¼»¯µÄ±äÁ¿£¬ËùÒÔ½«SerialPort.cppÖÐµÄCOMSTAT comstat;¸ÄÎªstatic COMSTAT comstat;¾Í¿ÉÒÔÕý³£Ê¹ÓÃCSerialPortÀàÁË¡£
-     ÒÔÉÏÊÇÔÚdebugÏÂµÄ½â¾ö·½°¸£¬µ±ÔÚRelease±àÒë×´Ì¬Ê±£¬Äã»á·¢ÏÖ²¢²»ÐèÒª½«COMSTAT comstat;¸ÄÎªstatic COMSTAT comstat;¾ÍÄÜ±àÒë³É¹¦²¢ÇÒ·¢ËÍ½ÓÊÕÏûÏ¢Õý³£¡£ÆäÊµ£¬ÔÚReleaseÏÂ£¬ËüµÄ»ù±¾ÔËÐÐÊ±¼ì²é³õÊ¼ÉèÖÃÒÑÎªÄ¬ÈÏ¡£ÕâÓ¦¸ÃÒ²ËãÊÇµÚÒ»ÖÖ½â¾ö·½°¸Ö®ÄÚ¡£
+2,CSerialPortç±»ä¸­å‡ºé”™
+é”™è¯¯:Run-Time Check Failure #3 - The variable 'comstat' is being used without being initialized.
+è§£å†³1:ä¸€ç§è§£å†³æ–¹æ¡ˆæ˜¯æ”¹å˜åŸºæœ¬è¿è¡Œæ—¶æ£€æŸ¥ï¼ˆchanging the runtime checks in project settingsï¼‰ï¼šåœ¨èœå•Projectï¼>Project properties-> C/C++ -> Code generation-> Basic Runtime checks --> change to 'Default'ï¼Œåœ¨ä¸­æ–‡ç‰ˆä¸­æ˜¯ï¼šé¡¹ç›®-ã€‰å±žæ€§-ã€‰é…ç½®å±žæ€§-ã€‰C/C++-ã€‰ä»£ç ç”Ÿæˆ-ã€‰åŸºæœ¬è¿è¡Œæ—¶æ£€æŸ¥-ã€‰è®¾ç½®ä¸ºé»˜è®¤ï¼Œå½“å°†åŸºæœ¬è¿è¡Œæ—¶æ£€æŸ¥æ”¹ä¸ºé»˜è®¤ä¹‹åŽï¼Œç¼–è¯‘è‡ªç„¶é¡ºåˆ©é€šè¿‡äº†ï¼Œå‘ä¸²å£è°ƒè¯•åŠ©æ‰‹å‘é€æ¶ˆæ¯æ­£å¸¸äº†ï¼Œå†ä»Žä¸²å£è°ƒè¯•åŠ©æ‰‹å‘SerialPortTestå‘é€æ¶ˆæ¯æ—¶ï¼Œä¹Ÿæ­£å¸¸äº†ã€‚
+è§£å†³2:å¦ä¸€ç§è§£å†³æ–¹æ¡ˆæ˜¯å°†CSerialPort.CPPä¸­çš„COMSTAT comstat;æ”¹ä¸ºstatic COMSTAT comstat;è¿™æ ·æ”¹äº†ä¹‹åŽï¼Œdebugé¡ºåˆ©é€šè¿‡ï¼Œç„¶åŽè°ƒè¯•ï¼Œä¸Žä¸²å£è°ƒè¯•åŠ©æ‰‹ç›¸äº’å‘æ¶ˆæ¯éƒ½ï¼¯ï¼«äº†ã€‚ä¸ºä»€ä¹ˆè¿™æ ·å°±èƒ½è§£å†³å‘¢ï¼Ÿå…¶å®žå½“ä½ ä½¿ç”¨debugè§£å†³æ–¹æ¡ˆæ—¶ï¼Œå®ƒçš„åŸºæœ¬è¿è¡Œæ—¶æ£€æŸ¥åˆå§‹è®¾ç½®ä¸ºï¼šä¸¤è€…(/RTC1ï¼Œç­‰åŒäºŽ /RTCsu)ï¼Œè¿™ä¸ªä¸¤è€…æ˜¯æŒ‡ï¼šå †æ ˆå¸§(/RTCs)ï¼Œæœªåˆå§‹åŒ–çš„å˜é‡(/RTCu)ã€‚ç”±äºŽå®ƒè¦æ£€æŸ¥æœªåˆå§‹åŒ–çš„å˜é‡ï¼Œæ‰€ä»¥å°†SerialPort.cppä¸­çš„COMSTAT comstat;æ”¹ä¸ºstatic COMSTAT comstat;å°±å¯ä»¥æ­£å¸¸ä½¿ç”¨CSerialPortç±»äº†ã€‚
+     ä»¥ä¸Šæ˜¯åœ¨debugä¸‹çš„è§£å†³æ–¹æ¡ˆï¼Œå½“åœ¨Releaseç¼–è¯‘çŠ¶æ€æ—¶ï¼Œä½ ä¼šå‘çŽ°å¹¶ä¸éœ€è¦å°†COMSTAT comstat;æ”¹ä¸ºstatic COMSTAT comstat;å°±èƒ½ç¼–è¯‘æˆåŠŸå¹¶ä¸”å‘é€æŽ¥æ”¶æ¶ˆæ¯æ­£å¸¸ã€‚å…¶å®žï¼Œåœ¨Releaseä¸‹ï¼Œå®ƒçš„åŸºæœ¬è¿è¡Œæ—¶æ£€æŸ¥åˆå§‹è®¾ç½®å·²ä¸ºé»˜è®¤ã€‚è¿™åº”è¯¥ä¹Ÿç®—æ˜¯ç¬¬ä¸€ç§è§£å†³æ–¹æ¡ˆä¹‹å†…ã€‚
 
-3,Ìí¼ÓDALSAÏà»úÏà¹ØÉèÖÃ
-3.1 ÏîÄ¿-ÊôÐÔÒ³-C/C++-³£¹æ-¸½¼Ó°üº¬Ä¿Â¼
-.;C:\Program Files\Teledyne DALSA\Sapera\Include;C:\Program Files\Teledyne DALSA\Sapera\Classes\Basic;C:\Program Files\Teledyne DALSA\Sapera\Classes\Gui;%(AdditionalIncludeDirectories)
-3.2 ÏîÄ¿-ÊôÐÔÒ³-C/C++-´úÂëÉú³É-ÔËÐÐ¿â-¶àÏß³Ìµ÷ÊÔDLL
-3.3 ÏîÄ¿-ÊôÐÔÒ³-Á´½ÓÆ÷-³£¹æ-¸½¼Ó¿âÄ¿Â¼ C:\Program Files\Teledyne DALSA\Sapera\Lib\Win64
-3.4 ÏîÄ¿-ÊôÐÔÒ³-Á´½ÓÆ÷-ÊäÈë-¸½¼ÓÒÀÀµ SapClassBasic.lib;SapClassGuiD.lib;ZLBImage.lib;ZLBCommon.lib
-3.5 ÏîÄ¿-ÊôÐÔÒ³-Á´½ÓÆ÷-¸ß¼¶-Ä¿±ê¼ÆËã»ú-MachineX64
-3.6 ÏîÄ¿-ÊôÐÔÒ³-×ÊÔ´-³£¹æ-¸½¼Ó°üº¬Ä¿Â¼ ..\..\..\..\Classes\Gui;%(AdditionalIncludeDirectories)
-3.7 ÏîÄ¿-ÊôÐÔÒ³-Éú³ÉÊÂ¼þ-Ô¤ÏÈÉú³ÉÊÂ¼þ-ÃüÁîÐÐ 
+3,æ·»åŠ DALSAç›¸æœºç›¸å…³è®¾ç½®
+3.1 é¡¹ç›®-å±žæ€§é¡µ-C/C++-å¸¸è§„-é™„åŠ åŒ…å«ç›®å½•
+.;C:\Program Files\Teledyne DALSA\Sapera\Lib\Win64;C:\Program Files\Teledyne DALSA\Sapera\Include;C:\Program Files\Teledyne DALSA\Sapera\Classes\Basic;C:\Program Files\Teledyne DALSA\Sapera\Classes\Gui;%(AdditionalIncludeDirectories)
+3.2 é¡¹ç›®-å±žæ€§é¡µ-C/C++-ä»£ç ç”Ÿæˆ-è¿è¡Œåº“-å¤šçº¿ç¨‹è°ƒè¯•DLL
+3.3 é¡¹ç›®-å±žæ€§é¡µ-é“¾æŽ¥å™¨-å¸¸è§„-é™„åŠ åº“ç›®å½• C:\Program Files\Teledyne DALSA\Sapera\Lib\Win64
+3.4 é¡¹ç›®-å±žæ€§é¡µ-é“¾æŽ¥å™¨-è¾“å…¥-é™„åŠ ä¾èµ– SapClassBasic.lib;SapClassGuiD.lib;ZLBImage.lib;ZLBCommon.lib
+3.5 é¡¹ç›®-å±žæ€§é¡µ-é“¾æŽ¥å™¨-é«˜çº§-ç›®æ ‡è®¡ç®—æœº-MachineX64
+3.6 é¡¹ç›®-å±žæ€§é¡µ-èµ„æº-å¸¸è§„-é™„åŠ åŒ…å«ç›®å½• ..\..\..\..\Classes\Gui;%(AdditionalIncludeDirectories)
+3.7 é¡¹ç›®-å±žæ€§é¡µ-ç”Ÿæˆäº‹ä»¶-é¢„å…ˆç”Ÿæˆäº‹ä»¶-å‘½ä»¤è¡Œ 
 if exist %SystemRoot%\SysWOW64 goto end
 echo (Sapera LT warning) Compiling a 64-bit configuration under 32-bit Windows
 :end
 
-4,CSerialPortÀàÖÐ±àÒë³öÏÖ¾¯¸æ
-´íÎó:warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecat
-½â¾ö1:ÏîÄ¿->ÊôÐÔ->ÅäÖÃÊôÐÔ->C/C++ -> Ô¤´¦ÀíÆ÷ -> Ô¤´¦ÀíÆ÷¶¨Òå£¬Ôö¼Ó_CRT_SECURE_NO_DEPRECATE 
+4,CSerialPortç±»ä¸­ç¼–è¯‘å‡ºçŽ°è­¦å‘Š
+é”™è¯¯:warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecat
+è§£å†³1:é¡¹ç›®->å±žæ€§->é…ç½®å±žæ€§->C/C++ -> é¢„å¤„ç†å™¨ -> é¢„å¤„ç†å™¨å®šä¹‰ï¼Œå¢žåŠ _CRT_SECURE_NO_DEPRECATE 
 
 
 
