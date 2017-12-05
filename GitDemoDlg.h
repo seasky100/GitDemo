@@ -1,6 +1,12 @@
 
 // GitDemoDlg.h : Í·ÎÄ¼þ
 //
+
+#include "SapClassBasic.h"
+#include "SapClassGui.h"
+#include "ZLBCommonLib.h"
+#include "ZLBImageLib.h"
+
 #include "SerialPort.h"
 #pragma once
 
@@ -30,6 +36,12 @@ protected:
 	DECLARE_MESSAGE_MAP()
 	afx_msg LRESULT OnReceiveData(WPARAM wParam, LPARAM lParam);
 public:
+	 CImageExWnd    m_ImageWnd_1;
+	CString m_configFileName_1;
+	SapAcqDevice	*m_AcqDevice_1;
+	SapBuffer		*m_Buffers_1;
+	SapTransfer		*m_Xfer_1;
+	SapView        *m_View_1;
 	//double m_dbVoltage_1;
 	//double m_dbVoltage_2;
 	//double m_dbSpeed;
@@ -40,4 +52,10 @@ public:
 	double m_dbSpeed;
 	double m_dbVoltage_1;
 	double m_dbVoltage_2;
+	BOOL CreateObjects_1();
+	BOOL DestroyObjects_1();
+	void FitToWindow(SapView *pView);
+	static void XferCallback_1(SapXferCallbackInfo * pInfo);
+	afx_msg void OnBnClickedOk();
+	afx_msg void OnBnClickedCancel();
 };
