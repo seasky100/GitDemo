@@ -62,5 +62,7 @@ public:
 	unsigned long m_ulTriggerNumber_1;
 	unsigned long m_ulSaveNumber_1;
 	bool m_bDirectoryExists_1;
-	char* m_cSavePath_1;
+	char m_cSavePath_1[1024];
+	long m_TriggerNumber_1;
+	long m_SaveNumber_1;
 };

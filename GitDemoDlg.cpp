@@ -57,6 +57,9 @@ CGitDemoDlg::CGitDemoDlg(CWnd* pParent /*=NULL*/)
 	,m_pfLog_1(NULL)
 	, m_ulSaveNumber_1(0)
 	, m_bDirectoryExists_1(false)
+	, m_TriggerNumber_1(0)
+	, m_SaveNumber_1(0)
+	//,m_strLeftPath("")
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
@@ -68,6 +71,8 @@ void CGitDemoDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_EDIT3, m_dbSpeed);
 	DDX_Text(pDX, IDC_EDIT1, m_dbVoltage_1);
 	DDX_Text(pDX, IDC_EDIT2, m_dbVoltage_2);
+	DDX_Text(pDX, IDC_EDIT4, m_TriggerNumber_1);
+	DDX_Text(pDX, IDC_EDIT5, m_SaveNumber_1);
 }
 
 BEGIN_MESSAGE_MAP(CGitDemoDlg, CDialogEx)
@@ -138,8 +143,10 @@ BOOL CGitDemoDlg::OnInitDialog()
 			dl[i].Index=i;
 		}
 	}
-	//m_AcqDevice_1	= new SapAcqDevice(SapLocation(dl[1].Index,0),"C:\\T_Linea_M2048-7um_Default_Default.ccf");
-		m_AcqDevice_1	= new SapAcqDevice(SapLocation(dl[1].Index,0),"C:\\Program Files\\Teledyne DALSA\\Sapera\\Examples\\NET\\GitDemo\\GitDemo\\T_Linea_M2048-7um_12080124_3M.ccf");
+	
+		//m_AcqDevice_1	= new SapAcqDevice(SapLocation(dl[1].Index,0),"C:\\T_Linea_M2048-7um_12080124_3M.ccf");
+	m_AcqDevice_1	= new SapAcqDevice(SapLocation(dl[1].Index,0),"C:\\T_Linea_M2048-7um_Default_Default.ccf");
+		//m_AcqDevice_1	= new SapAcqDevice(SapLocation(dl[1].Index,0),"C:\\Program Files\\Teledyne DALSA\\Sapera\\Examples\\NET\\GitDemo\\GitDemo\\T_Linea_M2048-7um_12080124_3M.ccf");
 		//m_AcqDevice_1	= new SapAcqDevice(SapLocation(dl[1].Index,0),m_configFileName_1);
 
 
@@ -160,9 +167,11 @@ BOOL CGitDemoDlg::OnInitDialog()
    m_ImageWnd_1.Reset();
 
    FitToWindow(m_View_1);
+   m_ImageWnd_1.Refresh();
+
    CString m_strLeftPath;
-   m_strLeftPath="D:\\";
-   m_cSavePath_1=m_strLeftPath.GetBuffer();
+   m_strLeftPath="D:\\Image";
+   memcpy(m_cSavePath_1,m_strLeftPath.GetBuffer(),m_strLeftPath.GetLength());
 
     SYSTEMTIME time;
 	::GetLocalTime(&time);
@@ -181,9 +190,9 @@ BOOL CGitDemoDlg::OnInitDialog()
 	if(m_SerialPortTwo.InitPort(this,3,9600,'N',8,1,EV_RXCHAR|EV_CTS,512))
 	{
 		m_SerialPortTwo.StartMonitoring();
-		SetTimer(1,500,NULL);
+		//SetTimer(1,500,NULL);
 	}
-	
+	SetTimer(1,500,NULL);
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
 
@@ -222,11 +231,38 @@ void CGitDemoDlg::FitToWindow(SapView *pView)
 
 	scaleWidthFactor = 100.0f * scaleWidth / pView->GetBuffer()->GetWidth();
 	scaleHeightFactor= 100.0f * scaleHeight / pView->GetBuffer()->GetHeight();
-	scaleWidthFactor=(float)23.584;
-	scaleHeightFactor=(float)25.5859;
+	//scaleWidthFactor=(float)23.584;
+	//scaleHeightFactor=(float)25.5859;
 	pView->SetScalingMode( scaleWidthFactor/100.0f, scaleHeightFactor/100.0f);
 	UpdateData( FALSE);
 
+	//	int viewWidth;
+	//int viewHeight;
+
+	//m_pView->GetViewArea( &viewWidth, &viewHeight);
+
+	//m_scaleWidthFactor = 100.0f * viewWidth/m_pView->GetBuffer()->GetWidth();
+	//m_scaleHeightFactor= 100.0f * viewHeight/m_pView->GetBuffer()->GetHeight();
+
+	//if( m_bLockAspectRatio)
+	//{
+	//	if( m_scaleWidthFactor < m_scaleHeightFactor)
+	//	{
+	//		m_scaleHeightFactor= m_scaleWidthFactor;
+	//	}
+	//	else
+	//	{
+	//		m_scaleWidthFactor= m_scaleHeightFactor;
+	//	}
+	//}
+
+	//m_scaleWidth = (DWORD)floor(m_pView->GetBuffer()->GetWidth()  * m_scaleWidthFactor/100 + 0.5f);
+	//m_scaleHeight= (DWORD)floor(m_pView->GetBuffer()->GetHeight() * m_scaleHeightFactor/100 + 0.5f);
+
+	//m_scaleWidthFactor = 100.0f * m_scaleWidth / m_pView->GetBuffer()->GetWidth();
+	//m_scaleHeightFactor= 100.0f * m_scaleHeight / m_pView->GetBuffer()->GetHeight();
+
+	//UpdateData( FALSE);
 }
 
 void CGitDemoDlg::OnSysCommand(UINT nID, LPARAM lParam)
@@ -322,11 +358,15 @@ LRESULT CGitDemoDlg::OnReceiveData(WPARAM wParam, LPARAM lParam)
 
 void CGitDemoDlg::OnTimer(UINT_PTR nIDEvent)
 {
-	byte sendvoltage[] = {0x01,0x03,0x02,0x58,0x00,0x04,0xC4,0x62};
-	byte sendfrequency[]={0x01,0x03,0x00,0x00,0x00,0x08,0x44,0x0C};
-	//m_SerialPortOne.WriteToPort((char*)sendvoltage,8);
-	m_SerialPortTwo.WriteToPort((char*)sendfrequency,8);
-	KillTimer(1);
+	//byte sendvoltage[] = {0x01,0x03,0x02,0x58,0x00,0x04,0xC4,0x62};
+	//byte sendfrequency[]={0x01,0x03,0x00,0x00,0x00,0x08,0x44,0x0C};
+	////m_SerialPortOne.WriteToPort((char*)sendvoltage,8);
+	//m_SerialPortTwo.WriteToPort((char*)sendfrequency,8);
+	//KillTimer(1);
+
+	m_TriggerNumber_1=m_ulTriggerNumber_1;
+   m_SaveNumber_1=m_ulSaveNumber_1;
+   UpdateData(false);
 	CDialogEx::OnTimer(nIDEvent);
 }
 
@@ -462,12 +502,11 @@ void CGitDemoDlg::XferCallback_1(SapXferCallbackInfo * pInfo)
     void *pImageData_1 = NULL;
     BOOL iSucceed = 0;
     SapBuffer *pBuffer_1 = NULL;
-	char ch_ImageFileName_1[1024];
+	char ch_ImageFileName_1[4096];
 	int iCount = 0;
 	time_t start;
 	time_t end;
 	double timeSpace;
-	
     //pDlg->m_View_1->Show();
 
 	pBuffer_1 = pDlg->m_Buffers_1;
@@ -497,6 +536,7 @@ void CGitDemoDlg::XferCallback_1(SapXferCallbackInfo * pInfo)
 
 		pBuffer_1->ReleaseAddress(&pImageData_1);
    }
+
 }
 
 
@@ -509,10 +549,10 @@ void CGitDemoDlg::OnBnClickedOk()
 	{
 
 	// Acquisition Control
-	GetDlgItem(IDOK)->EnableWindow(bAcqNoGrab);
-	GetDlgItem(IDCANCEL)->EnableWindow(bAcqGrab);
+	GetDlgItem(IDCANCEL)->EnableWindow(bAcqNoGrab);
+	GetDlgItem(IDOK)->EnableWindow(bAcqGrab);
 	}
-	CDialogEx::OnOK();
+	//CDialogEx::OnOK();
 }
 
 
@@ -528,8 +568,9 @@ void CGitDemoDlg::OnBnClickedCancel()
 			m_Xfer_1->Abort();
 		}
 		// Acquisition Control
-		GetDlgItem(IDOK)->EnableWindow(bAcqNoGrab);
-		GetDlgItem(IDCANCEL)->EnableWindow(bAcqGrab);
+		GetDlgItem(IDCANCEL)->EnableWindow(bAcqNoGrab);
+		GetDlgItem(IDOK)->EnableWindow(bAcqGrab);
 	}
+	KillTimer(1);
 	CDialogEx::OnCancel();
 }
