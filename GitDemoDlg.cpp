@@ -6,6 +6,7 @@
 #include "GitDemo.h"
 #include "GitDemoDlg.h"
 #include "afxdialogex.h"
+#include "Cameras.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -68,6 +69,7 @@ void CGitDemoDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_VIEW_WND1, m_ImageWnd_1);
+	DDX_Control(pDX, IDC_VIEW_WND2, m_ImageWnd_2);
 	DDX_Text(pDX, IDC_EDIT3, m_dbSpeed);
 	DDX_Text(pDX, IDC_EDIT1, m_dbVoltage_1);
 	DDX_Text(pDX, IDC_EDIT2, m_dbVoltage_2);
@@ -89,6 +91,25 @@ END_MESSAGE_MAP()
 
 
 // CGitDemoDlg 消息处理程序
+
+double ReadFreeSpace(CString strPath)
+{
+	HANDLE hFile=NULL;
+	char szVolumeFile[10];
+	double dRet=-1.0;
+	DWORD dwSectPerClust,dwBytePerSect,dwNumberOfFreeClusters;
+	sprintf_s(szVolumeFile,"%s:\\",strPath.Left(1));
+	if(!GetDiskFreeSpace(szVolumeFile,&dwSectPerClust,&dwBytePerSect,&dwNumberOfFreeClusters,NULL))
+	{
+		dRet=-1.0;
+	}
+	else
+	{
+		dRet=(DWORD64)dwSectPerClust*(DWORD64)dwBytePerSect*(DWORD64)dwNumberOfFreeClusters/1024.0/1024.0/1024.0;
+		//sprintf(szVolumeFile,"free size:%.02f",dRet);
+	}
+	return dRet;
+}
 
 BOOL CGitDemoDlg::OnInitDialog()
 {
@@ -144,6 +165,8 @@ BOOL CGitDemoDlg::OnInitDialog()
 		}
 	}
 	
+	//CCameras ss;
+	//ss.CreateCamera("sss","ddd",XferCallback_1,this,&m_ImageWnd_1);
 		//m_AcqDevice_1	= new SapAcqDevice(SapLocation(dl[1].Index,0),"C:\\T_Linea_M2048-7um_12080124_3M.ccf");
 	m_AcqDevice_1	= new SapAcqDevice(SapLocation(dl[1].Index,0),"C:\\T_Linea_M2048-7um_Default_Default.ccf");
 		//m_AcqDevice_1	= new SapAcqDevice(SapLocation(dl[1].Index,0),"C:\\Program Files\\Teledyne DALSA\\Sapera\\Examples\\NET\\GitDemo\\GitDemo\\T_Linea_M2048-7um_12080124_3M.ccf");
@@ -161,13 +184,25 @@ BOOL CGitDemoDlg::OnInitDialog()
 
    if (!CreateObjects_1()) { EndDialog(TRUE); return FALSE; }
 
-	
    //m_ImageWnd_1.AttachEventHandler(this);
    m_ImageWnd_1.CenterImage();
    m_ImageWnd_1.Reset();
 
    FitToWindow(m_View_1);
    m_ImageWnd_1.Refresh();
+
+ //  	SYSTEMTIME time;
+	//::GetLocalTime(&time);
+	//m_pTimeFileName = ZLBGetFormatTime(time.wYear,time.wMonth,time.wDay,time.wHour,time.wMinute,time.wSecond,time.wMilliseconds);
+	//m_strLeftPath.Format("%s\\%s\\Left",m_strStoragePath.GetBuffer(),m_pTimeFileName);
+	//m_strRightPath.Format("%s\\%s\\Right",m_strStoragePath.GetBuffer(),m_pTimeFileName);
+	//m_cSavePath_1=m_strLeftPath.GetBuffer();
+	//m_cSavePath_2=m_strRightPath.GetBuffer();
+    double m_dFreeSpaceG;
+	m_dFreeSpaceG=ReadFreeSpace(m_strStoragePath);
+
+	//CString temp;
+	//temp.Format("#FreeSize:%.02fGB,Ready...$\r\n",m_dFreeSpaceG);
 
    CString m_strLeftPath;
    m_strLeftPath="D:\\Image";
@@ -497,7 +532,7 @@ BOOL CGitDemoDlg::DestroyObjects_1()
 void CGitDemoDlg::XferCallback_1(SapXferCallbackInfo * pInfo)
 {
 	CGitDemoDlg *pDlg= (CGitDemoDlg *) pInfo->GetContext();
-
+	int iCounter,iWidth,iHeight = 0;
 		int iImageType = 0;
     void *pImageData_1 = NULL;
     BOOL iSucceed = 0;
@@ -508,6 +543,59 @@ void CGitDemoDlg::XferCallback_1(SapXferCallbackInfo * pInfo)
 	time_t end;
 	double timeSpace;
     //pDlg->m_View_1->Show();
+	HDC view;
+	pDlg->m_View_1->GetDC(&view);
+	//BOOL Rectangle(HDC hdc, int nLeftRect, int nTopRect, int nRightRect, int nBottomRect)；
+	CPen penRed(PS_SOLID, 1, RGB(255,255,255));
+	SelectObject(view, penRed);
+	MoveToEx(view,10,10,NULL);
+	LineTo(view,200,200 );
+	//Rectangle(view, 10, 10, 100, 100);
+	
+
+
+//
+//	CDC MemDC; //首先定义一个显示设备对象
+//CBitmap MemBitmap;//定义一个位图对象
+////随后建立与屏幕显示兼容的内存显示设备
+//MemDC.CreateCompatibleDC(NULL);
+////这时还不能绘图，因为没有地方画 ^_^
+////下面建立一个与屏幕显示兼容的位图，至于位图的大小嘛，可以用窗口的大小，也可以自己定义（如：有滚动条时就要大于当前窗口的大小，在BitBlt时决定拷贝内存的哪部分到屏幕上）
+////MemBitmap.CreateCompatibleBitmap(pDC,nWidth,nHeight);
+//CBitmap  MemBitmap.CreateBitmap(bmp.bmWidth,bmp.bmHeight,1,24,pBits);
+//MemBitmap.SetBitmapBits(
+////将位图选入到内存显示设备中
+////只有选入了位图的内存显示设备才有地方绘图，画到指定的位图上
+//CBitmap *pOldBit=MemDC.SelectObject(&MemBitmap);
+////先用背景色将位图清除干净，这里我用的是白色作为背景
+////你也可以用自己应该用的颜色
+//MemDC.FillSolidRect(0,0,nWidth,nHeight,RGB(255,255,255));
+//	CDC MemDC; //首先定义一个显示设备对象
+//CBitmap MemBitmap;//定义一个位图对象
+////随后建立与屏幕显示兼容的内存显示设备
+//MemDC.CreateCompatibleDC(NULL);
+////这时还不能绘图，因为没有地方画 ^_^
+////下面建立一个与屏幕显示兼容的位图，至于位图的大小嘛，可以用窗口的大小，也可以自己定义（如：有滚动条时就要大于当前窗口的大小，在BitBlt时决定拷贝内存的哪部分到屏幕上）
+//MemBitmap.CreateCompatibleBitmap(pDC,nWidth,nHeight);
+//
+//
+////将位图选入到内存显示设备中
+////只有选入了位图的内存显示设备才有地方绘图，画到指定的位图上
+//CBitmap *pOldBit=MemDC.SelectObject(&MemBitmap);
+////先用背景色将位图清除干净，这里我用的是白色作为背景
+////你也可以用自己应该用的颜色
+//MemDC.FillSolidRect(0,0,nWidth,nHeight,RGB(255,255,255));
+////绘图
+//MemDC.MoveTo(……);
+//MemDC.LineTo(……);
+//
+//
+////将内存中的图拷贝到屏幕上进行显示
+//pDC->BitBlt(0,0,nWidth,nHeight,&MemDC,0,0,SRCCOPY);
+////绘图完成后的清理
+//MemBitmap.DeleteObject();
+//MemDC.DeleteDC();
+
 
 	pBuffer_1 = pDlg->m_Buffers_1;
 
@@ -515,6 +603,51 @@ void CGitDemoDlg::XferCallback_1(SapXferCallbackInfo * pInfo)
    iSucceed = (pBuffer_1->GetAddress(&pImageData_1));
    if(iSucceed)
    {
+
+
+
+	//    CPaintDC l_PaintDC( this ) ; 
+ //CRect l_rcClient ; 
+ //GetClientRect( &l_rcClient ) ; 
+ //CDC l_MaskDC ; 
+ //l_MaskDC.CreateCompatibleDC( &l_PaintDC ) ; 
+ //CBitmap l_MaskBitmap ; 
+ //l_MaskBitmap.CreateBitmap( l_rcClient.Width(),  l_rcClient.Height(), 1, 1, NULL ) ; 
+ //CBitmap* l_pOldMaskBitmap = l_MaskDC.SelectObject( &l_MaskBitmap ) ; 
+ //CDC l_MemoryDC ;
+ //l_MemoryDC.CreateCompatibleDC( &l_PaintDC ) ; 
+ //CBitmap* l_pOldMemoryBitmap = l_MemoryDC.SelectObject( CBitmap::FromHandle( l_hbmpBitmap ) ) ; 
+ //COLORREF l_crOldBack =l_MemoryDC.SetBkColor( RGB( 255, 0, 255 ) ) ; 
+ //l_MaskDC.BitBlt( 0, 0, l_rcClient.Width(), l_rcClient.Height(), &l_MemoryDC, 0, 0, SRCCOPY ) ; 
+ //l_PaintDC.BitBlt( 0, 0, l_rcClient.Width(), l_rcClient.Height(), &l_MemoryDC, 0, 0, SRCINVERT ) ; 
+ //l_PaintDC.BitBlt( 0, 0, l_rcClient.Width(), l_rcClient.Height(), &l_MaskDC, 0, 0, SRCAND ) ; 
+ //l_PaintDC.BitBlt( 0, 0, l_rcClient.Width(), l_rcClient.Height(), &l_MemoryDC, 0, 0, SRCINVERT ) ; 
+ //l_MemoryDC.SelectObject( l_pOldMemoryBitmap ) ; 
+ //l_MaskDC.SelectObject( l_pOldMaskBitmap ) ; 
+
+	   		CDC *pDC;
+		pDC=pDlg->GetDC();
+	   CDC MemDC; //首先定义一个显示设备对象
+		CBitmap  MemBitmap;
+		iWidth = pBuffer_1->GetWidth();
+		iHeight = pBuffer_1->GetHeight();
+		
+		//随后建立与屏幕显示兼容的内存显示设备
+		MemDC.CreateCompatibleDC(pDC);
+		MemBitmap.CreateCompatibleBitmap(pDC,iWidth,iHeight);
+		MemBitmap.SetBitmapBits(iWidth*iHeight,pImageData_1);
+		//MemBitmap.CreateBitmap( iWidth, iHeight, 1, 1, NULL ) ; 
+		//MemBitmap.CreateBitmap(iWidth,iHeight,1,24,pImageData_1);
+		//只有选入了位图的内存显示设备才有地方绘图，画到指定的位图上
+		CBitmap *pOldBit=MemDC.SelectObject(&MemBitmap);//图像在MemDC中
+
+		//将内存中的图拷贝到屏幕上进行显示
+		pDC->BitBlt(0,0,200,200,&MemDC,0,0,SRCCOPY);
+		//pDC->BitBlt(0,0,iWidth,iHeight,&MemDC,0,0,SRCCOPY);
+		//绘图完成后的清理
+		MemBitmap.DeleteObject();
+		MemDC.DeleteDC();
+
 	   if(!pDlg->m_bDirectoryExists_1)
 		{
 			//判断目录是否存在,如果不存在就创建目录
@@ -522,8 +655,22 @@ void CGitDemoDlg::XferCallback_1(SapXferCallbackInfo * pInfo)
 			ZLBCreateDirectory(pDlg->m_cSavePath_1);
 		}
 		start = clock();
-		sprintf_s(ch_ImageFileName_1,1024,"%s\\%08d.bmp",pDlg->m_cSavePath_1,++pDlg->m_ulSaveNumber_1);
-		pBuffer_1->Save(ch_ImageFileName_1,"-format bmp");
+		//sprintf_s(ch_ImageFileName_1,1024,"%s\\%08d.bmp",pDlg->m_cSavePath_1,++pDlg->m_ulSaveNumber_1);
+		//pBuffer_1->Save(ch_ImageFileName_1,"-format bmp");
+		sprintf_s(ch_ImageFileName_1,1024,"%s\\%08d.jpg",pDlg->m_cSavePath_1,++pDlg->m_ulSaveNumber_1);
+		//pBuffer_1->Save(ch_ImageFileName_1,"-format jpeg -quality 80");
+		pBuffer_1->Save(ch_ImageFileName_1,"-format jpeg");
+		//CRect rect;
+		//rect.top =0;
+		//rect.left =0;
+		//rect.right =100;
+		//rect.bottom=100;
+		//HBITMAP hBitmapSrc;  
+		//hBitmapSrc = CreateCompatibleBitmap(view, rect.right, rect.bottom);  
+		//SelectObject(hMemDC, hBitmapSrc);  
+		//BitBlt(hMemDC, 0, 0, rect.right, rect.bottom, hdc, 0, 0, SRCCOPY);  
+		//SaveBitmap(hBitmapSrc , "C:\\123.bmp");     // SaveBitmap()是自定义的一个函数，用来把传递进来的位图句柄保存成图片文件  
+
 		end = clock();
 		timeSpace =(double)(end - start);
 		if(pDlg->m_pfLog_1 != NULL)

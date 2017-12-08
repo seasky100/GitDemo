@@ -23,6 +23,8 @@ public:
 	SapTransfer		*m_Xfer_1;
 	SapView        *m_View_1;
 	int GetCameraCount(void);
-
+	BOOL CreateObjects_1();
+	BOOL DestroyObjects_1();
+	bool CreateCamera(CString SerialNumber,CString ConfigFile,SapXferCallback pCallback,void *pContext,CImageExWnd *pImageWnd);
 };
 

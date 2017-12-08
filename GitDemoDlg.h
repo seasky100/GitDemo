@@ -37,11 +37,16 @@ protected:
 	afx_msg LRESULT OnReceiveData(WPARAM wParam, LPARAM lParam);
 public:
 	 CImageExWnd    m_ImageWnd_1;
+	 CImageExWnd    m_ImageWnd_2;
 	CString m_configFileName_1;
 	SapAcqDevice	*m_AcqDevice_1;
 	SapBuffer		*m_Buffers_1;
 	SapTransfer		*m_Xfer_1;
 	SapView        *m_View_1;
+		//´æ´¢Â·¾¶
+	CString m_strStoragePath;
+	CString m_strLeftPath;
+	CString m_strRightPath;
 	//double m_dbVoltage_1;
 	//double m_dbVoltage_2;
 	//double m_dbSpeed;
