@@ -13,6 +13,7 @@
 #define new DEBUG_NEW
 #endif
 
+#define WIDTHBYTES(bits) (((bits) + 31) / 32 * 4);
 
 // 用于应用程序“关于”菜单项的 CAboutDlg 对话框
 
@@ -765,7 +766,8 @@ void CGitDemoDlg::XferCallback_1(SapXferCallbackInfo * pInfo)
 
 	   dib.DrawBmp(&MemDC,0,0,0);
 
-	   //pDC->StretchBlt(0,0,512,512,&MemDC,0,0,2048,2048,SRCCOPY);
+	   pDC->SetStretchBltMode(COLORONCOLOR);
+	   pDC->StretchBlt(0,0,512,512,&MemDC,0,0,2048,2048,SRCCOPY);
 
 
 	   
@@ -783,6 +785,111 @@ void CGitDemoDlg::XferCallback_1(SapXferCallbackInfo * pInfo)
 		//BITMAPINFO ucPicBoxInfo;
 
 		//StretchDIBits(pDC->GetSafeHdc(),0,0,512,512,0,0,2048,2048,(void *)pImageData_1,(BITMAPINFO*)ucPicBoxInfo,DIB_RGB_COLORS,SRCCOPY);
+
+	//    #define WIDTHBYTES(bits)    (((bits) + 31) / 32 * 4)
+ //// TODO: Add your control notification handler code here
+ //int i,j;
+ //BYTE* m_bitData=new BYTE[800*600];
+ //ZeroMemory((void*)m_bitData, 800*600);
+ //for (i=0; i<600; i++)
+ //{
+ // for(j=0; j<800; j++)
+ // {
+ //  m_bitData[i*800+j]=255*i/600;
+ // }
+ //}
+
+ //LONG lWidth=2048;
+ //LONG lHeight=2048;
+ //LPBITMAPINFO lpbmi;
+ //// BMP文件头的句柄
+ //HANDLE hBmpFileHead;
+ ////计算信息头和调色板的大小
+ //hBmpFileHead=::GlobalAlloc(GHND,sizeof(BITMAPINFOHEADER)
+ //        + sizeof(RGBQUAD)
+ //        * 256);
+ //if(hBmpFileHead==0)
+ //{
+ // AfxMessageBox("分配内存失败");
+ // return;
+ //}
+ ////填充信息头
+ //lpbmi=(LPBITMAPINFO)::GlobalLock((HGLOBAL)hBmpFileHead);
+ //lpbmi->bmiHeader.biSize=sizeof(BITMAPINFOHEADER);
+ //lpbmi->bmiHeader.biWidth=lWidth;
+ //lpbmi->bmiHeader.biHeight=lHeight;
+ //lpbmi->bmiHeader.biPlanes=1;
+ //lpbmi->bmiHeader.biBitCount=8;
+ //lpbmi->bmiHeader.biCompression=BI_RGB;
+ //lpbmi->bmiHeader.biSizeImage=(((lWidth*8) + 31) / 32 * 4)*lHeight;
+ //lpbmi->bmiHeader.biXPelsPerMeter=0;
+ //lpbmi->bmiHeader.biYPelsPerMeter=0;
+ //lpbmi->bmiHeader.biClrUsed=256;
+ //lpbmi->bmiHeader.biClrImportant=256;
+ ////填充256级灰度调色板
+ ////int i,j;
+ //for(int i=0;i<256;i++)
+ //{
+ // lpbmi->bmiColors[i].rgbBlue=i;
+ // lpbmi->bmiColors[i].rgbGreen=i;
+ // lpbmi->bmiColors[i].rgbRed=i;
+ // lpbmi->bmiColors[i].rgbReserved=0;
+ //}
+ // StretchDIBits(MemDC.GetSafeHdc(),  
+ //       0,0,  
+ //               2048,  
+ //               2048,  
+ //       0,0,2047+1,2047+1,  
+ //       pImageData_1,  
+ //       lpbmi,  
+ //       DIB_RGB_COLORS,  
+ //       SRCCOPY  );
+
+ //StretchDIBits( pDC->GetSafeHdc(),  
+ //       0,0,  
+ //               2048,  
+ //               2048,  
+ //       0,0,2047+1,2047+1,  
+ //       pImageData_1,  
+ //       lpbmi,  
+ //       DIB_RGB_COLORS,  
+ //       SRCCOPY  );
+
+////填充文件头
+// BITMAPFILEHEADER bmfHeader;
+// ZeroMemory(&bmfHeader,sizeof(bmfHeader));
+// bmfHeader.bfOffBits=sizeof(BITMAPFILEHEADER)+sizeof(BITMAPINFOHEADER)+ sizeof(RGBQUAD) * 256;
+// bmfHeader.bfSize=lpbmi->bmiHeader.biSizeImage+bmfHeader.bfOffBits;
+// bmfHeader.bfType='MB';
+// BYTE* pBits=new BYTE[lpbmi->bmiHeader.biSizeImage];
+// ZeroMemory((void*)pBits, lpbmi->bmiHeader.biSizeImage);
+// for (i=0; i<lHeight; i++)
+// {
+//  for (j=0; j<lWidth;j++)
+//  {
+//   pBits[WIDTHBYTES(lWidth*8)*(lHeight-1-i)+j]=m_bitData[i*lWidth+j];
+//  }
+// }
+// 
+// CString str="c://test1.bmp";
+// HANDLE hFile=CreateFile(str,GENERIC_WRITE,FILE_SHARE_WRITE,NULL,CREATE_ALWAYS,FILE_ATTRIBUTE_NORMAL,NULL);
+// if(hFile!=INVALID_HANDLE_VALUE)
+// {
+//  DWORD dwRet=0;
+//  WriteFile(hFile,&bmfHeader,sizeof(bmfHeader),&dwRet,NULL);
+//  WriteFile(hFile,&lpbmi->bmiHeader,sizeof(lpbmi->bmiHeader),&dwRet,NULL);
+//  WriteFile(hFile,&lpbmi->bmiColors[0],sizeof(RGBQUAD) * 256,&dwRet,NULL);
+//  WriteFile(hFile,pBits,lpbmi->bmiHeader.biSizeImage,&dwRet,NULL);
+//  CloseHandle(hFile); 
+// }
+// delete[] pBits;
+// delete[] m_bitData;
+// ::GlobalUnlock((HGLOBAL)hBmpFileHead);
+// ::GlobalFree((HGLOBAL) hBmpFileHead);
+//
+
+
+
 //
 //		unsigned char hBitMapInfo[sizeof(BITMAPINFOHEADER)+  
 //                          sizeof(RGBQUAD)* 256];  
@@ -929,7 +1036,7 @@ void CGitDemoDlg::XferCallback_1(SapXferCallbackInfo * pInfo)
 	//CBitmap *pOldBit=MemDC.SelectObject(&bitmap);//图像在MemDC中
 		//CBitmap *pOldBit=MemDC.SelectObject(&MemBitmap);//图像在MemDC中
 
-		//pDC->BitBlt(0,0,200,200,&MemDC,0,0,SRCCOPY);
+		//pDC->BitBlt(0,0,512,512,&MemDC,0,0,SRCCOPY);
 
 		pDlg->m_ulSaveNumber_1++;
 
