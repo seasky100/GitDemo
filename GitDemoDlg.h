@@ -60,6 +60,7 @@ public:
 	BOOL CreateObjects_1();
 	BOOL DestroyObjects_1();
 	void FitToWindow(SapView *pView);
+	//static void SaveBitmap(CString strFilePath, CBitmap Bitmap);
 	static void XferCallback_1(SapXferCallbackInfo * pInfo);
 	afx_msg void OnBnClickedOk();
 	afx_msg void OnBnClickedCancel();

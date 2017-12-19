@@ -45,6 +45,9 @@
     <ClInclude Include="Cameras.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="256Dib.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GitDemo.cpp">
@@ -60,6 +63,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Cameras.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="256Dib.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

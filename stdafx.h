@@ -4,6 +4,9 @@
 // 特定于项目的包含文件
 
 #pragma once
+//#define ULONG_PTR unsigned long
+//#include "Gdiplus.h"
+//using namespace Gdiplus;
 
 #ifndef _SECURE_ATL
 #define _SECURE_ATL 1
@@ -25,7 +28,6 @@
 
 
 #include <afxdisp.h>        // MFC 自动化类
-
 
 
 #ifndef _AFX_NO_OLE_SUPPORT
@@ -55,4 +57,10 @@
 #endif
 #endif
 
-
+//
+//#ifndef ULONG_PTR
+//typedef  unsigned long*   ULONG_PTR;
+//#include "GdiPlus.h"//头文件
+//using namespace Gdiplus;//命名空间
+//#pragma comment(lib, "gdiplus.lib")//库文件
+//#endif

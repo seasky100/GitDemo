@@ -109,13 +109,13 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_DEPRECATE;_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
-      <AdditionalIncludeDirectories>C:\Program Files\Teledyne DALSA\Sapera\Lib\Win64;.;C:\Program Files\Teledyne DALSA\Sapera\Lib\Win64\VS2010;C:\Program Files\Teledyne DALSA\Sapera\Include;C:\Program Files\Teledyne DALSA\Sapera\Classes\Gui;C:\Program Files\Teledyne DALSA\Sapera\Classes\Basic;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;C:\Program Files\Teledyne DALSA\Sapera\Include;C:\Program Files\Teledyne DALSA\Sapera\Classes\Basic;C:\Program Files\Teledyne DALSA\Sapera\Classes\Gui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>SapClassBasic.lib;SapClassGuiD.lib;ZLBImage.lib;ZLBCommon.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:\Program Files\Teledyne DALSA\Sapera\Lib\Win64</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Program Files\Teledyne DALSA\Sapera\Lib\Win64\VS2010;C:\Program Files\Teledyne DALSA\Sapera\Lib\Win64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
@@ -189,6 +189,7 @@ echo (Sapera LT warning) Compiling a 64-bit configuration under 32-bit Windows
     <None Include="res\GitDemo.rc2" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="256Dib.h" />
     <ClInclude Include="Cameras.h" />
     <ClInclude Include="GitDemo.h" />
     <ClInclude Include="GitDemoDlg.h" />
@@ -198,6 +199,7 @@ echo (Sapera LT warning) Compiling a 64-bit configuration under 32-bit Windows
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="256Dib.cpp" />
     <ClCompile Include="Cameras.cpp" />
     <ClCompile Include="GitDemo.cpp" />
     <ClCompile Include="GitDemoDlg.cpp" />

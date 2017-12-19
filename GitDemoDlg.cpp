@@ -7,6 +7,7 @@
 #include "GitDemoDlg.h"
 #include "afxdialogex.h"
 #include "Cameras.h"
+#include "256Dib.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -188,7 +189,7 @@ BOOL CGitDemoDlg::OnInitDialog()
    m_ImageWnd_1.CenterImage();
    m_ImageWnd_1.Reset();
 
-   FitToWindow(m_View_1);
+   //FitToWindow(m_View_1);
    m_ImageWnd_1.Refresh();
 
  //  	SYSTEMTIME time;
@@ -529,6 +530,105 @@ BOOL CGitDemoDlg::DestroyObjects_1()
 	return TRUE;
 }
 
+void  LoadMemImage( void *  pMemData,  long  len)
+{
+HGLOBAL hGlobal  =  GlobalAlloc(GMEM_MOVEABLE, len);
+void *  pData  =  GlobalLock(hGlobal);
+memcpy(pData, pMemData, len);
+GlobalUnlock(hGlobal);
+IStream *  pStream  =  NULL;
+if  (CreateStreamOnHGlobal(hGlobal, TRUE,  & pStream)  ==  S_OK)
+{
+CImage image;
+if (SUCCEEDED(image.Load(pStream)))
+    {
+		image.Save("D:\\111.jpg");
+ 
+}
+pStream -> Release();    
+}
+GlobalFree(hGlobal);
+}
+
+
+void Save_Bitmap(CString strFilePath, CBitmap* Bitmap)
+{
+if ( Bitmap->m_hObject )
+{
+CImage imgTemp; // CImage是MFC中的类。
+imgTemp.Attach(Bitmap->operator HBITMAP());
+imgTemp.Save(strFilePath);
+}
+}
+//
+//int GetEncoderClsid(const WCHAR* format, CLSID* pClsid)   
+//{   
+//    UINT num = 0;                     // number of image encoders   
+//    UINT size = 0;                   // size of the image encoder array in bytes   
+//    ImageCodecInfo* pImageCodecInfo = NULL;   
+//    GetImageEncodersSize(&num, &size);   
+//    if(size == 0)   
+//        return -1;     //   Failure   
+//    
+//    pImageCodecInfo = (ImageCodecInfo*)(malloc(size));   
+//    if(pImageCodecInfo == NULL)   
+//        return -1;     //   Failure   
+//    
+//    GetImageEncoders(num, size, pImageCodecInfo);   
+//    for(UINT j = 0; j < num; ++j)   
+//    {   
+//        if( wcscmp(pImageCodecInfo[j].MimeType, format) == 0 )   
+//        {   
+//            *pClsid = pImageCodecInfo[j].Clsid;   
+//            free(pImageCodecInfo);   
+//            return j;     //   Success   
+//        }           
+//    }   
+//    free(pImageCodecInfo);   
+//    return -1;     //   Failure   
+//}
+
+//void SaveFile(Bitmap* pImage, const wchar_t* pFileName)//
+//{
+//    EncoderParameters encoderParameters;
+//    CLSID jpgClsid; 
+//	GetEncoderClsid(L"image/jpeg", &jpgClsid);
+//    encoderParameters.Count = 1;
+//    encoderParameters.Parameter[0].Guid = EncoderQuality;
+//    encoderParameters.Parameter[0].Type = EncoderParameterValueTypeLong;
+//    encoderParameters.Parameter[0].NumberOfValues = 1;
+//    // Save the image as a JPEG with quality level 100.
+//    ULONG             quality;
+//    quality = 100;
+//    encoderParameters.Parameter[0].Value = &quality;
+//    Status status = pImage->Save(pFileName, &jpgClsid, &encoderParameters);
+//    if (status != Ok) 
+//    {
+//        wprintf(L"%d Attempt to save %s failed./n", status, pFileName);
+//    }
+//}
+
+void FillBitmapInfo( BITMAPINFO *bmi, int width, int height, int bpp,int pitch )
+{
+ BITMAPINFOHEADER* bmih = &(bmi->bmiHeader);
+ memset( bmih, 0, sizeof(*bmih));
+ bmih->biWidth  = width;
+ bmih->biHeight = pitch*height;
+ bmih->biPlanes = 1;
+ bmih->biBitCount = bpp;
+ bmih->biCompression = BI_RGB; 
+ bmih->biSize   = sizeof(BITMAPINFOHEADER);
+ if( bpp == 8 )
+ {
+  RGBQUAD* palette = bmi->bmiColors;
+  int i;
+  for( i = 0; i < 256; i++ )
+  {
+   palette[i].rgbBlue = palette[i].rgbGreen = palette[i].rgbRed = (BYTE)i;
+   palette[i].rgbReserved = 0;
+  }
+ }
+}
 void CGitDemoDlg::XferCallback_1(SapXferCallbackInfo * pInfo)
 {
 	CGitDemoDlg *pDlg= (CGitDemoDlg *) pInfo->GetContext();
@@ -542,7 +642,9 @@ void CGitDemoDlg::XferCallback_1(SapXferCallbackInfo * pInfo)
 	time_t start;
 	time_t end;
 	double timeSpace;
-    //pDlg->m_View_1->Show();
+    
+	pDlg->m_View_1->Show();
+	
 	HDC view;
 	pDlg->m_View_1->GetDC(&view);
 	//BOOL Rectangle(HDC hdc, int nLeftRect, int nTopRect, int nRightRect, int nBottomRect)；
@@ -598,12 +700,20 @@ void CGitDemoDlg::XferCallback_1(SapXferCallbackInfo * pInfo)
 
 
 	pBuffer_1 = pDlg->m_Buffers_1;
-
+	iCount =  pInfo->GetEventCount();
    pDlg->m_ulTriggerNumber_1++;
    iSucceed = (pBuffer_1->GetAddress(&pImageData_1));
    if(iSucceed)
    {
 
+
+	   
+//	   CImage imgTemp; // CImage是MFC中的类。
+//	   IStream p(pImageData_1);
+//
+//	   imgTemp.Load((IStream*)pImageData_1);
+//	   sprintf_s(ch_ImageFileName_1,1024,"%s\\%08d.bmp",pDlg->m_cSavePath_1,++pDlg->m_ulSaveNumber_1);
+//imgTemp.Save(ch_ImageFileName_1);
 
 
 	//    CPaintDC l_PaintDC( this ) ; 
@@ -632,22 +742,291 @@ void CGitDemoDlg::XferCallback_1(SapXferCallbackInfo * pInfo)
 		iWidth = pBuffer_1->GetWidth();
 		iHeight = pBuffer_1->GetHeight();
 		
+		//LoadMemImage(pImageData_1,iWidth*iHeight);
 		//随后建立与屏幕显示兼容的内存显示设备
+		//MemDC.CreateCompatibleDC(NULL);
+		//MemBitmap.CreateCompatibleBitmap(&MemDC,iWidth,iHeight);
+
 		MemDC.CreateCompatibleDC(pDC);
 		MemBitmap.CreateCompatibleBitmap(pDC,iWidth,iHeight);
-		MemBitmap.SetBitmapBits(iWidth*iHeight,pImageData_1);
+		//MemBitmap.CreateBitmapIndirect
+		//MemBitmap.CreateBitmap(iWidth,iHeight,1,24,pImageData_1);
+
+		//MemBitmap.CreateBitmap(iWidth,iHeight,1,8,NULL);
+		//
+		////MemBitmap.CreateCompatibleBitmap(pDC,iWidth/4,iHeight/4);
+		//MemBitmap.SetBitmapBits(iWidth*iHeight,pImageData_1);
+
+		CBitmap *pOldBit=MemDC.SelectObject(&MemBitmap);//图像在MemDC中
+
+		C256Dib dib;
+	   dib.Create256Dib(2048,2048,-1);
+	   dib.CopyPixels(pImageData_1);
+
+	   dib.DrawBmp(&MemDC,0,0,0);
+
+	   //pDC->StretchBlt(0,0,512,512,&MemDC,0,0,2048,2048,SRCCOPY);
+
+
+	   
+		//pDC->BitBlt(0,0,2048,2048,&MemDC,0,0,SRCCOPY);
+
+		//CBitmap  bitmap;
+		//bitmap.CreateCompatibleBitmap(pDC,iWidth,iHeight);
+		//bitmap.SetBitmapBits(iWidth*iHeight,pImageData_1);
+
+		//MemBitmap.CreateCompatibleBitmap(pDC,iWidth,iHeight);
+		//MemBitmap.SetBitmapBits(iWidth*iHeight,pImageData_1);
+		//bool a=MemBitmap.CreateBitmap(2048,2048,1,8,NULL);
+		//bool a=MemBitmap.CreateBitmap(2048,2048,1,8,NULL);
+		//DWORD c=MemBitmap.SetBitmapBits(iWidth*iHeight,pImageData_1);
+		//BITMAPINFO ucPicBoxInfo;
+
+		//StretchDIBits(pDC->GetSafeHdc(),0,0,512,512,0,0,2048,2048,(void *)pImageData_1,(BITMAPINFO*)ucPicBoxInfo,DIB_RGB_COLORS,SRCCOPY);
+//
+//		unsigned char hBitMapInfo[sizeof(BITMAPINFOHEADER)+  
+//                          sizeof(RGBQUAD)* 256];  
+//tagBITMAPINFO *BitMapInfo=(tagBITMAPINFO *) hBitMapInfo;  
+//for(int i=0;i<256;i++)  
+//{  
+//    BitMapInfo->bmiColors[i].rgbBlue = i;  
+//    BitMapInfo->bmiColors[i].rgbGreen = i;  
+//    BitMapInfo->bmiColors[i].rgbRed = i;  
+//    BitMapInfo->bmiColors[i].rgbReserved = i;  
+//}  
+//BitMapInfo->bmiHeader.biSize=40;//sizeof(tagBITMAPINFOHEADER); 
+//BitMapInfo->bmiHeader.biBitCount = 8;  
+//BitMapInfo->bmiHeader.biClrImportant = 0;  
+//BitMapInfo->bmiHeader.biClrUsed = 0;  
+//BitMapInfo->bmiHeader.biCompression = BI_RGB;  
+//BitMapInfo->bmiHeader.biPlanes = 1;  
+//BitMapInfo->bmiHeader.biSizeImage =0;  
+//BitMapInfo->bmiHeader.biXPelsPerMeter = 0;  
+//BitMapInfo->bmiHeader.biYPelsPerMeter = 0;  
+////BitMapInfo->bmiHeader.biSizeImage =0;  
+////BitMapInfo->bmiHeader.biXPelsPerMeter = 0;  
+////BitMapInfo->bmiHeader.biYPelsPerMeter = 0;  
+////BitMapInfo->bmiHeader.biHeight = nLines+1;//  
+////BitMapInfo->bmiHeader.biWidth = nPixels+1;//  
+////StretchDIBits( pDC->GetSafeHdc(),  
+////        0,0,  
+////                m_ClientRect.right,  
+////                m_ClientRect.bottom,  
+////        0,0,nPixels+1,nLines+1,  
+////        pImage,  
+////        BitMapInfo,  
+////        DIB_RGB_COLORS,  
+////        SRCCOPY  );  
+//
+//BitMapInfo->bmiHeader.biHeight = -2048;//  
+//BitMapInfo->bmiHeader.biWidth = 2048;//  
+//
+//		::SetDIBitsToDevice (	pDC->GetSafeHdc(),	//1
+//								0,					//2
+//								0,					//3
+//								2048,	//4
+//								2048,	//5
+//								0,				//6
+//								0,				//7
+//								0,				//8
+//								2048, //9
+//								pImageData_1, //10
+//								BitMapInfo,	//11
+//								DIB_RGB_COLORS);	//12
+
+//BITMAPFILEHEADER bmf;
+//bmf.bfType =0x4D42;
+//bmf.bfSize =sizeof(BITMAPINFOHEADER)+ sizeof(RGBQUAD)* 256+2048*2048;
+//bmf.bfReserved1=0;
+//bmf.bfReserved2=0;
+//bmf.bfOffBits=sizeof(BITMAPINFOHEADER)+ sizeof(RGBQUAD)* 256;
+//CFile fp;
+//fp.Open("D:\\model.bmp",CFile::modeCreate|CFile::modeWrite);
+//fp.Write((LPSTR)&bmf,sizeof(BITMAPFILEHEADER));
+//fp.Write((LPSTR)BitMapInfo,sizeof(BITMAPINFOHEADER)+ sizeof(RGBQUAD)* 256);
+//fp.Write(pImageData_1,2048*2048);
+//fp.Close();
+
+//StretchDIBits( pDC->GetSafeHdc(),  
+//        0,0,  
+//                512,  
+//                512,  
+//        0,0,2047+1,2047+1,  
+//        pImageData_1,  
+//        BitMapInfo,  
+//        DIB_RGB_COLORS,  
+//        SRCCOPY  );  
+
+
+  //BITMAPINFO   bmi;   
+  //bmi.bmiHeader.biSize=sizeof(BITMAPINFO);   
+  //bmi.bmiHeader.biWidth=2048;   
+  //bmi.bmiHeader.biHeight=2048;   
+  //bmi.bmiHeader.biPlanes=1;   
+  //bmi.bmiHeader.biBitCount=8;   
+  //bmi.bmiHeader.biCompression=BI_RGB;   
+  //bmi.bmiHeader.biClrUsed=0;   
+  //  
+  ////HDC   hdc=GetWindowDC(Panel1->Handle);   
+  ////SetStretchBltMode(COLORONCOLOR);   
+  //StretchDIBits(pDC->GetSafeHdc(),0,0,512,512,0,0,2048,2048,pImageData_1,&bmi,DIB_RGB_COLORS,SRCCOPY);
+
+
+//BITMAPINFO *bm=(BITMAPINFO*)new byte[sizeof(BITMAPINFO)+sizeof(RGBQUAD)*(256)];   
+//FillBitmapInfo(bm,2048,-2048,8,2048);
+//
+//StretchDIBits( pDC->GetSafeHdc(),  
+//        0,0,  
+//                512,  
+//                512,  
+//        0,0,2048,2048,  
+//        pImageData_1,  
+//        bm,  
+//        DIB_RGB_COLORS,  
+//        SRCCOPY  );  
+
+
+//pDC->StretchBlt(0,0,512,512,&MemDC,0,0,2048,2048,SRCCOPY);
+
+		//BITMAP bm;
+		//BYTE *pBits=new BYTE[2048*2048];
+		////MemBitmap.GetObject(sizeof(bm), &bm);
+		//bm.bmHeight=2048;
+		//bm.bmWidth=2048;
+		//bm.bmBitsPixel=8;
+		//bm.bmType=0;
+		//bm.bmBits=pBits;//pImageData_1;
+		//bm.bmWidthBytes=iWidth+iWidth%2;//iWidth/2+(iWidth/2)%2;
+		//bool b=MemBitmap.CreateBitmapIndirect(&bm);
+
+
+
+		//MemBitmap.CreateBitmap(2048,2048,1,8,pImageData_1);
+
+
+		//CDC   memDC;  
+  // CBitmap   memBitmap;  
+  // memDC.CreateCompatibleDC(pDC);  
+  // memBitmap.CreateBitmap(width,height,1,24,(BYTE*)pImageData);  
+  // CBitmap*   pOldBitmap=memDC.SelectObject(&memBitmap);  
+  //  
+  // pDC->BitBlt(0,0,width,height,&memDC,0,0,SRCCOPY);  
+  //  
+  // memDC.SelectObject(pOldBitmap);  
+
+/*		hBitmap =CreateBitmap(100,100,1,32,p); 
+        hBitmapDC = CreateCompatibleDC(hdc); 
+        SelectObject(hBitmapDC,hBitmap);*/ 
+
+		
+
 		//MemBitmap.CreateBitmap( iWidth, iHeight, 1, 1, NULL ) ; 
 		//MemBitmap.CreateBitmap(iWidth,iHeight,1,24,pImageData_1);
 		//只有选入了位图的内存显示设备才有地方绘图，画到指定的位图上
-		CBitmap *pOldBit=MemDC.SelectObject(&MemBitmap);//图像在MemDC中
+
+		//SelectObject(MemDC,MemBitmap);
+
+	//CBitmap *pOldBit=MemDC.SelectObject(&bitmap);//图像在MemDC中
+		//CBitmap *pOldBit=MemDC.SelectObject(&MemBitmap);//图像在MemDC中
+
+		//pDC->BitBlt(0,0,200,200,&MemDC,0,0,SRCCOPY);
+
+		pDlg->m_ulSaveNumber_1++;
+
+
+		//sprintf_s(ch_ImageFileName_1,1024,"%s\\%08d.jpg",pDlg->m_cSavePath_1,++pDlg->m_ulSaveNumber_1);
+		CString st;
+		   CString m_strLeftPath;
+   m_strLeftPath="D:\\Image";
+		//memcpy(m_cSavePath_1,m_strLeftPath.GetBuffer(),m_strLeftPath.GetLength());
+		//st.Format("%s\\%08d.jpg",pDlg->m_cSavePath_1,++pDlg->m_ulSaveNumber_1);
+		st.Format("%s\\1-%08d.jpg",m_strLeftPath,pDlg->m_ulSaveNumber_1);
+		//Save_Bitmap(st,&MemBitmap);
+		
+		
+		CImage imgTemp; // CImage是MFC中的类。
+		//imgTemp.Create(iWidth,iHeight,24) ;
+		//HDC hdc=imgTemp.GetDC();
+		
+		//StretchBlt(hdc,0,0,2048,2048,MemDC.GetSafeHdc(),0,0,512,512,SRCCOPY);
+		//pDC->StretchBlt(0,0,512,512,&MemDC,0,0,512,512,SRCCOPY);
+		//imgTemp.b
+		//BitBlt(imgTemp.GetDC(),0,0,2048,2048,MemDC.m_hDC,0,0,SRCCOPY);
+		
+		//HBITMAP b1=CreateBitmap(iWidth,iHeight,1,32,pImageData_1);
+		//imgTemp.Attach(b1);
+
+		imgTemp.Attach(MemBitmap.operator HBITMAP());
+		//imgTemp.Attach((HBITMAP)MemBitmap.GetSafeHandle()); 
+
+		imgTemp.Save(st );
+		////imgTemp.Save(st,Gdiplus::ImageFormatJPEG );
+		
+
+		//st.Format("%s\\4-%08d.jpg",m_strLeftPath,pDlg->m_ulSaveNumber_1);
+		////Save_Bitmap(st,&MemBitmap);
+		//
+		//
+		//CImage img;
+		//img.Attach(bitmap.operator HBITMAP());
+		//img.Save(st );
+
+//Bitmap Image(HBITMAP(MemBitmap),NULL);//从CBitmap中得到HBitmap
+//
+// EncoderParameters encoderParameters;
+//    CLSID jpgClsid; 
+//	GetEncoderClsid(L"image/jpeg", &jpgClsid);
+//    encoderParameters.Count = 1;
+//    encoderParameters.Parameter[0].Guid = EncoderQuality;
+//    encoderParameters.Parameter[0].Type = EncoderParameterValueTypeLong;
+//    encoderParameters.Parameter[0].NumberOfValues = 1;
+//    // Save the image as a JPEG with quality level 100.
+//    ULONG             quality;
+//    quality = 100;
+//    encoderParameters.Parameter[0].Value = &quality;
+//    Status status = Image.Save(pFileName, &jpgClsid, &encoderParameters);
+
+//	Bitmap mbitmap(HBITMAP(MemBitmap),NULL);//从CBitmap中得到HBitmap
+//CLSID jpegClsid;
+//
+//
+//
+//GetEncoderClsid(L"image/jpeg", &jpegClsid);//选择编码
+//
+//
+//CStringW strWide = CT2CW(st); // 将T字符转换成宽字符
+//WCHAR *pFileName = strWide.GetBuffer();  // 获取CString内部缓存，并保证缓存长
+//mbitmap.Save(pFileName,&jpegClsid);
+
+
+
+ 
+
+
+
+//mbitmap.Save("bbb.jpg",&jpegClsid);//保存
+
+		//const unsigned short *pFileName=L"d://new.jpg";//保存路径
+		//SaveFile(&MemBitmap,pFileName );
+
 
 		//将内存中的图拷贝到屏幕上进行显示
-		pDC->BitBlt(0,0,200,200,&MemDC,0,0,SRCCOPY);
+		//pDC->StretchBlt(0,0,512,512,&MemDC,0,0,2048,2048,SRCCOPY);
+		//pDC->BitBlt(0,0,2048,2048,&MemDC,0,0,SRCCOPY);
+		int width=iWidth;
+		int height=iHeight;
+
+		//CImage image;
+  //  image.Create(width, height, 32);
+  //  BitBlt(image.GetDC(), 0, 0, width, height, MemDC.m_hDC, 0, 0, SRCCOPY);
+
+  //  HRESULT hResult = image.Save("D:\\new.jpg");
+
 		//pDC->BitBlt(0,0,iWidth,iHeight,&MemDC,0,0,SRCCOPY);
 		//绘图完成后的清理
 		MemBitmap.DeleteObject();
 		MemDC.DeleteDC();
-
+		
 	   if(!pDlg->m_bDirectoryExists_1)
 		{
 			//判断目录是否存在,如果不存在就创建目录
@@ -655,11 +1034,18 @@ void CGitDemoDlg::XferCallback_1(SapXferCallbackInfo * pInfo)
 			ZLBCreateDirectory(pDlg->m_cSavePath_1);
 		}
 		start = clock();
+		memcpy(pDlg->m_cSavePath_1,m_strLeftPath.GetBuffer(),m_strLeftPath.GetLength());
+		sprintf_s(ch_ImageFileName_1,1024,"%s\\2-%08d.bmp",pDlg->m_cSavePath_1,pDlg->m_ulSaveNumber_1);
+		pBuffer_1->Save(ch_ImageFileName_1,"-format bmp");
+
+		
+
 		//sprintf_s(ch_ImageFileName_1,1024,"%s\\%08d.bmp",pDlg->m_cSavePath_1,++pDlg->m_ulSaveNumber_1);
-		//pBuffer_1->Save(ch_ImageFileName_1,"-format bmp");
-		sprintf_s(ch_ImageFileName_1,1024,"%s\\%08d.jpg",pDlg->m_cSavePath_1,++pDlg->m_ulSaveNumber_1);
+		//pBuffer_1->Save("D:\\Image\\SS.avi","-format avi",-1,iCount);
+
+		//sprintf_s(ch_ImageFileName_1,1024,"%s\\3-%08d.jpg",pDlg->m_cSavePath_1,++pDlg->m_ulSaveNumber_1);
 		//pBuffer_1->Save(ch_ImageFileName_1,"-format jpeg -quality 80");
-		pBuffer_1->Save(ch_ImageFileName_1,"-format jpeg");
+		//pBuffer_1->Save(ch_ImageFileName_1,"-format jpeg");
 		//CRect rect;
 		//rect.top =0;
 		//rect.left =0;

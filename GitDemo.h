@@ -10,6 +10,8 @@
 
 #include "resource.h"		// 主符号
 
+//#include   "GdiPlus.h "
+//using   namespace   Gdiplus;
 
 // CGitDemoApp:
 // 有关此类的实现，请参阅 GitDemo.cpp
@@ -19,7 +21,7 @@ class CGitDemoApp : public CWinApp
 {
 public:
 	CGitDemoApp();
-
+	ULONG_PTR        m_gdiplusToken;
 // 重写
 public:
 	virtual BOOL InitInstance();
@@ -27,6 +29,7 @@ public:
 // 实现
 
 	DECLARE_MESSAGE_MAP()
+	virtual int ExitInstance();
 };
 
 extern CGitDemoApp theApp;
