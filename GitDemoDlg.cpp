@@ -747,9 +747,9 @@ void CGitDemoDlg::XferCallback_1(SapXferCallbackInfo * pInfo)
 		//随后建立与屏幕显示兼容的内存显示设备
 		//MemDC.CreateCompatibleDC(NULL);
 		//MemBitmap.CreateCompatibleBitmap(&MemDC,iWidth,iHeight);
-
+		
 		MemDC.CreateCompatibleDC(pDC);
-		MemBitmap.CreateCompatibleBitmap(pDC,iWidth,iHeight);
+		MemBitmap.CreateCompatibleBitmap(pDC,iWidth/4,iHeight/4);
 		//MemBitmap.CreateBitmapIndirect
 		//MemBitmap.CreateBitmap(iWidth,iHeight,1,24,pImageData_1);
 
@@ -760,14 +760,14 @@ void CGitDemoDlg::XferCallback_1(SapXferCallbackInfo * pInfo)
 
 		CBitmap *pOldBit=MemDC.SelectObject(&MemBitmap);//图像在MemDC中
 
-		C256Dib dib;
-	   dib.Create256Dib(2048,2048,-1);
-	   dib.CopyPixels(pImageData_1);
+		//C256Dib dib;
+	 //  dib.Create256Dib(2048,2048,-1);
+	 //  dib.CopyPixels(pImageData_1);
 
-	   dib.DrawBmp(&MemDC,0,0,0);
+	 //  dib.DrawBmp(&MemDC,0,0,0);
 
-	   pDC->SetStretchBltMode(COLORONCOLOR);
-	   pDC->StretchBlt(0,0,512,512,&MemDC,0,0,2048,2048,SRCCOPY);
+	 //  pDC->SetStretchBltMode(COLORONCOLOR);
+	 //  pDC->StretchBlt(0,0,512,512,&MemDC,0,0,2048,2048,SRCCOPY);
 
 
 	   
@@ -799,51 +799,54 @@ void CGitDemoDlg::XferCallback_1(SapXferCallbackInfo * pInfo)
  // }
  //}
 
- //LONG lWidth=2048;
- //LONG lHeight=2048;
- //LPBITMAPINFO lpbmi;
- //// BMP文件头的句柄
- //HANDLE hBmpFileHead;
- ////计算信息头和调色板的大小
- //hBmpFileHead=::GlobalAlloc(GHND,sizeof(BITMAPINFOHEADER)
- //        + sizeof(RGBQUAD)
- //        * 256);
- //if(hBmpFileHead==0)
- //{
- // AfxMessageBox("分配内存失败");
- // return;
- //}
- ////填充信息头
- //lpbmi=(LPBITMAPINFO)::GlobalLock((HGLOBAL)hBmpFileHead);
- //lpbmi->bmiHeader.biSize=sizeof(BITMAPINFOHEADER);
- //lpbmi->bmiHeader.biWidth=lWidth;
- //lpbmi->bmiHeader.biHeight=lHeight;
- //lpbmi->bmiHeader.biPlanes=1;
- //lpbmi->bmiHeader.biBitCount=8;
- //lpbmi->bmiHeader.biCompression=BI_RGB;
- //lpbmi->bmiHeader.biSizeImage=(((lWidth*8) + 31) / 32 * 4)*lHeight;
- //lpbmi->bmiHeader.biXPelsPerMeter=0;
- //lpbmi->bmiHeader.biYPelsPerMeter=0;
- //lpbmi->bmiHeader.biClrUsed=256;
- //lpbmi->bmiHeader.biClrImportant=256;
- ////填充256级灰度调色板
- ////int i,j;
- //for(int i=0;i<256;i++)
- //{
- // lpbmi->bmiColors[i].rgbBlue=i;
- // lpbmi->bmiColors[i].rgbGreen=i;
- // lpbmi->bmiColors[i].rgbRed=i;
- // lpbmi->bmiColors[i].rgbReserved=0;
- //}
- // StretchDIBits(MemDC.GetSafeHdc(),  
- //       0,0,  
- //               2048,  
- //               2048,  
- //       0,0,2047+1,2047+1,  
- //       pImageData_1,  
- //       lpbmi,  
- //       DIB_RGB_COLORS,  
- //       SRCCOPY  );
+ LONG lWidth=2048;
+ LONG lHeight=-2048;
+ LPBITMAPINFO lpbmi;
+ // BMP文件头的句柄
+ HANDLE hBmpFileHead;
+ //计算信息头和调色板的大小
+ hBmpFileHead=::GlobalAlloc(GHND,sizeof(BITMAPINFOHEADER)
+         + sizeof(RGBQUAD)
+         * 256);
+ if(hBmpFileHead==0)
+ {
+  AfxMessageBox("分配内存失败");
+  return;
+ }
+ //填充信息头
+ lpbmi=(LPBITMAPINFO)::GlobalLock((HGLOBAL)hBmpFileHead);
+ lpbmi->bmiHeader.biSize=sizeof(BITMAPINFOHEADER);
+ lpbmi->bmiHeader.biWidth=lWidth;
+ lpbmi->bmiHeader.biHeight=lHeight;
+ lpbmi->bmiHeader.biPlanes=1;
+ lpbmi->bmiHeader.biBitCount=8;
+ lpbmi->bmiHeader.biCompression=BI_RGB;
+ lpbmi->bmiHeader.biSizeImage=(((lWidth*8) + 31) / 32 * 4)*lHeight;
+ lpbmi->bmiHeader.biXPelsPerMeter=0;
+ lpbmi->bmiHeader.biYPelsPerMeter=0;
+ lpbmi->bmiHeader.biClrUsed=256;
+ lpbmi->bmiHeader.biClrImportant=256;
+ //填充256级灰度调色板
+ //int i,j;
+ for(int i=0;i<256;i++)
+ {
+  lpbmi->bmiColors[i].rgbBlue=i;
+  lpbmi->bmiColors[i].rgbGreen=i;
+  lpbmi->bmiColors[i].rgbRed=i;
+  lpbmi->bmiColors[i].rgbReserved=0;
+ }
+
+// CreateDIBSection( MemDC.GetSafeHdc(),lpbmi,DIB_RGB_COLORS,(void **)&pImageData_1,0,0 );
+  SetStretchBltMode(MemDC.GetSafeHdc(),COLORONCOLOR);
+  StretchDIBits(MemDC.GetSafeHdc(),  
+        0,0,  
+                512,  
+                512,  
+        0,0,2047+1,2047+1,  
+        pImageData_1,  
+        lpbmi,  
+        DIB_RGB_COLORS,  
+        SRCCOPY  );
 
  //StretchDIBits( pDC->GetSafeHdc(),  
  //       0,0,  
@@ -1147,10 +1150,10 @@ void CGitDemoDlg::XferCallback_1(SapXferCallbackInfo * pInfo)
 
 		
 
-		//sprintf_s(ch_ImageFileName_1,1024,"%s\\%08d.bmp",pDlg->m_cSavePath_1,++pDlg->m_ulSaveNumber_1);
+		//sprintf_s(ch_ImageFileName_1,1024,"%s\\%08d.bmp",pDlg->m_cSavePath_1,pDlg->m_ulSaveNumber_1);
 		//pBuffer_1->Save("D:\\Image\\SS.avi","-format avi",-1,iCount);
 
-		//sprintf_s(ch_ImageFileName_1,1024,"%s\\3-%08d.jpg",pDlg->m_cSavePath_1,++pDlg->m_ulSaveNumber_1);
+		//sprintf_s(ch_ImageFileName_1,1024,"%s\\3-%08d.jpg",pDlg->m_cSavePath_1,pDlg->m_ulSaveNumber_1);
 		//pBuffer_1->Save(ch_ImageFileName_1,"-format jpeg -quality 80");
 		//pBuffer_1->Save(ch_ImageFileName_1,"-format jpeg");
 		//CRect rect;
