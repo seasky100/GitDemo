@@ -1259,6 +1259,7 @@ void CGitDemoDlg::XferCallback_1(SapXferCallbackInfo * pInfo)
 		sprintf_s(ch_ImageFileName_1,1024,"%s\\2-%08d.bmp",pDlg->m_cSavePath_1,pDlg->m_ulSaveNumber_1);
 		pBuffer_1->Save(ch_ImageFileName_1,"-format bmp");
 
+
 		
 
 		//sprintf_s(ch_ImageFileName_1,1024,"%s\\%08d.bmp",pDlg->m_cSavePath_1,pDlg->m_ulSaveNumber_1);
