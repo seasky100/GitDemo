@@ -1246,7 +1246,7 @@ void CGitDemoDlg::XferCallback_1(SapXferCallbackInfo * pInfo)
 		//pDC->BitBlt(0,0,iWidth,iHeight,&MemDC,0,0,SRCCOPY);
 		//绘图完成后的清理
 		MemBitmap.DeleteObject();
-		MemDC.DeleteDC();
+		MemDC.DeleteDC();//清楚内存DC
 		
 	   if(!pDlg->m_bDirectoryExists_1)
 		{
