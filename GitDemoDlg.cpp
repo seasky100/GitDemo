@@ -151,6 +151,7 @@ BOOL CGitDemoDlg::OnInitDialog()
 	DeviceList dl[3];
 	int iServerCount=SapManager::GetServerCount();
 
+
 	for(int i=0;i<iServerCount;i++)
 	{
 		int iAcqDeviceNum=SapManager::GetResourceCount(i,SapManager::ResourceAcqDevice);
@@ -167,6 +168,9 @@ BOOL CGitDemoDlg::OnInitDialog()
 		}
 	}
 	
+
+ //SapAcqToBuf(SapAcquisition *pAcq, SapBuffer *pBuf, SapXferCallback pCallback = NULL, void *pContext = NULL)
+ //SapMultiAcqToBuf(SapAcquisition *pAcq[], SapBuffer *pBuf[], int numPairs, SapXferCallback pCallback = NULL, void *pContext = NULL)
 	//CCameras ss;
 	//ss.CreateCamera("sss","ddd",XferCallback_1,this,&m_ImageWnd_1);
 		//m_AcqDevice_1	= new SapAcqDevice(SapLocation(dl[1].Index,0),"C:\\T_Linea_M2048-7um_12080124_3M.ccf");
@@ -232,6 +236,116 @@ BOOL CGitDemoDlg::OnInitDialog()
 	SetTimer(1,500,NULL);
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
+
+//bool CNetWorkListDlg::ListAllCamera(int iMode)
+//{
+//	m_vecDeviceName.clear();
+//	m_vecServerName.clear();
+//
+//	for(int i = 0; i < SapManager::GetServerCount(); i++)
+//	{
+//		m_iServerCount++;
+//		// when m_serverCategory is ServerAcqDevice, show only servers that have only one resource that is an acqdevice and no acq
+//		int iAcqDeviceNum =  SapManager::GetResourceCount(i, SapManager::ResourceAcqDevice);
+//		int iAcqNum       =  SapManager::GetResourceCount(i, SapManager::ResourceAcq);
+//		if (iAcqDeviceNum > 0 || iAcqNum > 0)
+//		{
+//			/*获取服务器名字*/
+//			char ServerName[128];
+//			char DeviceName[128];
+//			string strDeviceName;
+//			string strServerName;
+//			memset(ServerName,0x00,128);
+//
+//			if(SapManager::GetServerName(i, ServerName, sizeof(ServerName)))
+//			{
+//				strServerName = string(ServerName);
+//				m_vecServerName.push_back(strServerName);
+//				//int index = SapManager::GetServerIndex()
+//				/*遍历该Server下所有的采集卡*/
+//				for(int iDeviceIndex = 0 ;iDeviceIndex < SapManager::GetResourceCount(ServerName, SapManager::ResourceAcq);iDeviceIndex++)
+//				{
+//					memset(DeviceName,0x00,128);
+//					/*获取相机名称*/
+//					if (SapManager::GetResourceName(ServerName, SapManager::ResourceAcq, iDeviceIndex, DeviceName, sizeof(DeviceName)))
+//					{
+//						//strcpy(m_pDeviceInfoStruct[iCameraCount]->chCameraSn,DeviceName);
+//						strDeviceName = string(DeviceName);
+//						m_vecDeviceName.push_back(strDeviceName);
+//						m_vecServerIndex.push_back(iDeviceIndex);
+//					}
+//					//m_pDeviceInfoStruct[iCameraCount]->iCameraInterFace = 0x03;
+//					m_iDeviceCount++;
+//				}
+//				/*遍历该Server下所有的设备*/
+//				for(int iDeviceIndex = 0 ;iDeviceIndex < SapManager::GetResourceCount(ServerName, SapManager::ResourceAcqDevice);iDeviceIndex++)
+//				{
+//					memset(DeviceName,0x00,128);
+//					//strcpy(m_pDeviceInfoStruct[iCameraCount]->chCameraReserved,ServerName);
+//					//m_pDeviceInfoStruct[iCameraCount]->chCameraSdkVersion[0] = (char)iDeviceIndex;
+//					/*获取相机名称*/
+//					if (SapManager::GetResourceName(ServerName, SapManager::ResourceAcqDevice, iDeviceIndex, DeviceName, sizeof(DeviceName)))
+//					{
+//						//SapManager::GetServerName(i, ServerName, sizeof(serverName));
+//						//SapAcqDevice camera(ServerName);
+//						//BOOL status = camera.Create();
+//						//if (status)
+//						//{
+//						////	// Get Serial Number Feature Value
+//						//   char serialNumberName[255];
+//						//	memset(serialNumberName,0x00,255);
+//						//	status = camera.GetFeatureValue("DeviceID", serialNumberName, sizeof(serialNumberName));
+//						//	if (status)
+//						//	{
+//								strDeviceName = string(DeviceName);
+//								m_vecDeviceName.push_back(strDeviceName);
+//								m_vecServerIndex.push_back(iDeviceIndex);
+//							/*}
+//						}*/
+//							//if (!camera.Destroy()) return;
+//							
+//					}
+//					//m_pDeviceInfoStruct[iCameraCount]->iCameraInterFace = 0x00;
+//				}
+//			}
+//		}
+//	}
+//
+//	if(m_vecDeviceName.size() == 0)
+//	{
+//		printf("@@iThreadCount = %d Can not Find Device\n",m_iServerCount);
+//	}
+//		
+//	/*打印所有的服务器名字以及设备名字*/
+//	for(int i = 0;i < m_vecDeviceName.size(); i++)
+//	{
+//		string strDeviceName = m_vecDeviceName.at 
+//
+//(i);
+//		//printf("@@%d DeviceCount = %d DeivceServer = %s DeviceName = %s\n",iThreadCount,m_vecDeviceName.size(),m_vecServerName.at 
+//
+//(i).c_str(),strDeviceName.c_str());
+//
+//		CString str;
+//		if(iMode == 0)
+//		{
+//			str.Format("@@%d List DeviceCount = %d DeivceServer = %s DeviceName = %s\n",i,m_vecDeviceName.size(),m_vecServerName.at 
+//
+//(i).c_str(),strDeviceName.c_str());
+//		}
+//		else if(iMode == 1)
+//		{
+//			str.Format("@@%d CallBack DeviceCount = %d DeivceServer = %s DeviceName = %s\n",i,m_vecDeviceName.size(),m_vecServerName.at 
+//
+//(i).c_str(),strDeviceName.c_str());
+//		}
+//		int iIndex = m_list.AddString(str);		
+//		m_list.SetCurSel(iIndex);
+//	}
+//
+//	return true;
+//}
+
 
 void CGitDemoDlg::FitToWindow(SapView *pView)
 {
@@ -740,8 +854,8 @@ void CGitDemoDlg::XferCallback_1(SapXferCallbackInfo * pInfo)
 		pDC=pDlg->GetDC();
 	   CDC MemDC; //首先定义一个显示设备对象
 		CBitmap  MemBitmap;
-		iWidth = pBuffer_1->GetWidth();
-		iHeight = pBuffer_1->GetHeight();
+		iWidth = pBuffer_1->GetWidth();//图像宽度
+		iHeight = pBuffer_1->GetHeight();//图像的高度
 		
 		//LoadMemImage(pImageData_1,iWidth*iHeight);
 		//随后建立与屏幕显示兼容的内存显示设备
@@ -800,7 +914,7 @@ void CGitDemoDlg::XferCallback_1(SapXferCallbackInfo * pInfo)
  //}
 
  LONG lWidth=2048;
- LONG lHeight=-2048;
+ LONG lHeight=-2048;//注意此位置为负值因为BMP图像数据存储是上下倒置
  LPBITMAPINFO lpbmi;
  // BMP文件头的句柄
  HANDLE hBmpFileHead;
@@ -827,7 +941,6 @@ void CGitDemoDlg::XferCallback_1(SapXferCallbackInfo * pInfo)
  lpbmi->bmiHeader.biClrUsed=256;
  lpbmi->bmiHeader.biClrImportant=256;
  //填充256级灰度调色板
- //int i,j;
  for(int i=0;i<256;i++)
  {
   lpbmi->bmiColors[i].rgbBlue=i;
@@ -837,16 +950,14 @@ void CGitDemoDlg::XferCallback_1(SapXferCallbackInfo * pInfo)
  }
 
 // CreateDIBSection( MemDC.GetSafeHdc(),lpbmi,DIB_RGB_COLORS,(void **)&pImageData_1,0,0 );
-  SetStretchBltMode(MemDC.GetSafeHdc(),COLORONCOLOR);
+  SetStretchBltMode(MemDC.GetSafeHdc(),COLORONCOLOR);//避免图像缩放失真添加模式
   StretchDIBits(MemDC.GetSafeHdc(),  
-        0,0,  
-                512,  
-                512,  
+        0,0,512,512,  
         0,0,2047+1,2047+1,  
         pImageData_1,  
         lpbmi,  
         DIB_RGB_COLORS,  
-        SRCCOPY  );
+        SRCCOPY);
 
  //StretchDIBits( pDC->GetSafeHdc(),  
  //       0,0,  
