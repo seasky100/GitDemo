@@ -1301,7 +1301,7 @@ void CGitDemoDlg::OnBnClickedOk()
 	BOOL bAcqNoGrab	= m_Xfer_1 && *m_Xfer_1 && !m_Xfer_1->IsGrabbing();
 	BOOL bAcqGrab		= m_Xfer_1 && *m_Xfer_1 && m_Xfer_1->IsGrabbing();
 	BOOL bNoGrab		= !m_Xfer_1 || !m_Xfer_1->IsGrabbing();
-	if( m_Xfer_1->Grab())
+	if( m_Xfer_1->Grab())//修改
 	{
 
 	// Acquisition Control
