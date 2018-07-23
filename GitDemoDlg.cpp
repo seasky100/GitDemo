@@ -1292,6 +1292,7 @@ void CGitDemoDlg::XferCallback_1(SapXferCallbackInfo * pInfo)
 		pBuffer_1->ReleaseAddress(&pImageData_1);
    }
 
+
 }
 
 
