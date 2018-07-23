@@ -1289,7 +1289,7 @@ void CGitDemoDlg::XferCallback_1(SapXferCallbackInfo * pInfo)
 			fprintf(pDlg->m_pfLog_1,"L:%d-%d-%d %d:%d:%d.%d tcount=%d acount=%d time=%f\r\n",time.wYear,time.wMonth,time.wDay,time.wHour,time.wMinute,time.wSecond,time.wMilliseconds,pDlg->m_ulTriggerNumber_1,pDlg->m_ulSaveNumber_1,timeSpace);
 		}
 
-		pBuffer_1->ReleaseAddress(&pImageData_1);
+		pBuffer_1->ReleaseAddress(&pImageData_1);//清除占用资源
    }
 
 
