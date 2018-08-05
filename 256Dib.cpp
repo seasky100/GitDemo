@@ -1,4 +1,4 @@
-//--------- 256Dib.cpp --t----------------------------------
+ï»¿//--------- 256Dib.cpp --t----------------------------------
 
 #include "stdafx.h"
 #include "256Dib.h"
@@ -70,7 +70,7 @@ VOID C256Dib::DrawBmp(CDC *pDC, int x, int y, int n)const
 {
 	CString str;
 
-	if( m_blLoaded )	//Èç¹ûÒÑ¾­ÔØÈëÍ¼Æ¬£¬Ôò»­³ö
+	if( m_blLoaded )	//å¦‚æžœå·²ç»è½½å…¥å›¾ç‰‡ï¼Œåˆ™ç”»å‡º
 	{
 /*
 		::StretchDIBits(	pDC->GetSafeHdc(),
@@ -99,7 +99,7 @@ VOID C256Dib::DrawBmp(CDC *pDC, int x, int y, int n)const
 								DIB_RGB_COLORS);	//12
 		if( n >= 1 )
 		{
-//			str.Format("W=%d,H=%d,±ê×¼²î=%d     ",m_nWidth, m_nHeight, m_nVariance );
+//			str.Format("W=%d,H=%d,æ ‡å‡†å·®=%d     ",m_nWidth, m_nHeight, m_nVariance );
 			str.Format("W=%d,H=%d     ",m_nWidth, m_nHeight );
 			pDC->TextOut(x,y+m_nHeight, str);
 		}
@@ -113,13 +113,13 @@ VOID C256Dib::DrawBmp(CDC *pDC, int x, int y, int n)const
 	}
 }
 
-BOOL C256Dib::IsLoadedBmp()		//ÊÇ·ñÒÑ¾­ÔØÈëÁËÍ¼Æ¬£¬Èç¹ûÊÇÔò·µ»ØTRUE
+BOOL C256Dib::IsLoadedBmp()		//æ˜¯å¦å·²ç»è½½å…¥äº†å›¾ç‰‡ï¼Œå¦‚æžœæ˜¯åˆ™è¿”å›žTRUE
 {
 	return m_blLoaded;
 }
 
 
-//×îÖÕ¶¼ÊÇµ÷ÓÃ¸Ãº¯Êý´´½¨8Î»Î»Í¼µÄ
+//æœ€ç»ˆéƒ½æ˜¯è°ƒç”¨è¯¥å‡½æ•°åˆ›å»º8ä½ä½å›¾çš„
 int C256Dib::Create8BitGrayMap( SIZE size, char cDirect )
 {
 	int i,j;
@@ -180,7 +180,7 @@ int C256Dib::Create8BitGrayMap( SIZE size, char cDirect )
 		m_pBitmapInfoY8->bmiHeader.biSizeImage = m_dwSizeImage;
 
 
-		for(i = 0, cClr=0xff; i<min(256,size.cy); i++,cClr--)			//³õÊ¼Öµ
+		for(i = 0, cClr=0xff; i<min(256,size.cy); i++,cClr--)			//åˆå§‹å€¼
 		{
 			for(j=0; j<size.cx; j++)
 			{
@@ -227,8 +227,8 @@ int C256Dib::Create256Dib( SIZE size )
 
 
 
-//----¿½±´ÏñËØ--------------------------------------
-void C256Dib::CopyPixels(PVOID pbSource)	//¿½±´ÏñËØ
+//----æ‹·è´åƒç´ --------------------------------------
+void C256Dib::CopyPixels(PVOID pbSource)	//æ‹·è´åƒç´ 
 {
 	::CopyMemory( m_pbPixels, pbSource, m_dwSizeImage );
 }

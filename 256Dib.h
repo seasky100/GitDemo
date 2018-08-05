@@ -1,9 +1,9 @@
-// -------------  256Dib.h s------------------------------
+ï»¿// -------------  256Dib.h s------------------------------
 //----------------------------------------------------------
 #if !defined(C256DIB_123_ABC_sdufwevmb)
 #define      C256DIB_123_ABC_sdufwevmb
 
-class C256Dib			//Í¨ÓÃµÄ256É«Î»Í¼
+class C256Dib			//é€šç”¨çš„256è‰²ä½å›¾
 {
 private:
 	BITMAPFILEHEADER m_bmfHeader;
@@ -20,8 +20,8 @@ public:
 	~C256Dib();
 	void CopyPixels(PVOID pbSource);
 
-//--------//´´½¨Ò»¸ö8Î»»Ò¶ÈÍ¼Æ¬---------------------------------------------
-	int Create8BitGrayMap( SIZE size, char cDirect );	//´´½¨Ò»¸ö8Î»»Ò¶ÈÍ¼Æ¬
+//--------//åˆ›å»ºä¸€ä¸ª8ä½ç°åº¦å›¾ç‰‡---------------------------------------------
+	int Create8BitGrayMap( SIZE size, char cDirect );	//åˆ›å»ºä¸€ä¸ª8ä½ç°åº¦å›¾ç‰‡
 	int Create256Dib( int nWidth, int nHeight );
 	int Create256Dib( SIZE size );
 	int Create256Dib( int nWidth, int nHeight, char cDirect );
@@ -35,16 +35,16 @@ public:
 
 
 protected:
-	POINT m_ptImageCenter;		//Í¼ÏñµÄÖĞĞÄ
-	BOOL m_blLoaded;		//ÊÇ·ñ×°ÈëÍ¼Æ¬
+	POINT m_ptImageCenter;		//å›¾åƒçš„ä¸­å¿ƒ
+	BOOL m_blLoaded;		//æ˜¯å¦è£…å…¥å›¾ç‰‡
 
-	HGLOBAL m_hGlobal;		//ÄÚ´æ¾ä±ú
-	PBYTE m_pbPixels;		//´æ´¢ÏñËØµÄÊ×µØÖ·
-	int m_nRowLength;		//±¾Í¼Ò»ĞĞµÄ×Ö½ÚÊı
+	HGLOBAL m_hGlobal;		//å†…å­˜å¥æŸ„
+	PBYTE m_pbPixels;		//å­˜å‚¨åƒç´ çš„é¦–åœ°å€
+	int m_nRowLength;		//æœ¬å›¾ä¸€è¡Œçš„å­—èŠ‚æ•°
 	int m_nWidth;
 	int m_nHeight;
 
-	int m_nAmountOfPixels;	//Í¼ÏñµÄÏñËØ¸öÊı£¬m_nAmountOfPixels = m_nWidth*m_nHeight£»
+	int m_nAmountOfPixels;	//å›¾åƒçš„åƒç´ ä¸ªæ•°ï¼Œm_nAmountOfPixels = m_nWidth*m_nHeightï¼›
 
 	int m_cDirection;		
 };

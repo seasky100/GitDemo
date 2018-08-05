@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "SapClassBasic.h"
 #include "SapClassGui.h"
 #include "ZLBCommonLib.h"

@@ -1,4 +1,4 @@
-/*
+﻿/*
 **	FILENAME			CSerialPort.cpp
 **
 **	PURPOSE				This class can read, write and watch one serial port.

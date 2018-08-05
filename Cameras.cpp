@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+ï»¿#include "StdAfx.h"
 #include "Cameras.h"
 
 
@@ -101,7 +101,7 @@ BOOL CCameras::CreateObjects_1()
 	//	if(bSet == FALSE)
 	//		return false;
 	//	
-	//	/*´´½¨±´¶ûÂË²¨*/
+	//	/*åˆ›å»ºè´å°”æ»¤æ³¢*/
 	//	if(!m_Bayer->Create())
 	//	{
 	//		return false;

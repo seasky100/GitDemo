@@ -1,5 +1,5 @@
-
-// GitDemoDlg.h : Í·ÎÄ¼ş
+ï»¿
+// GitDemoDlg.h : å¤´æ–‡ä»¶
 //
 
 #include "SapClassBasic.h"
@@ -10,24 +10,24 @@
 #include "SerialPort.h"
 #pragma once
 
-// CGitDemoDlg ¶Ô»°¿ò
+// CGitDemoDlg å¯¹è¯æ¡†
 class CGitDemoDlg : public CDialogEx
 {
-// ¹¹Ôì
+// æ„é€ 
 public:
-	CGitDemoDlg(CWnd* pParent = NULL);	// ±ê×¼¹¹Ôìº¯Êı
+	CGitDemoDlg(CWnd* pParent = NULL);	// æ ‡å‡†æ„é€ å‡½æ•°
 
-// ¶Ô»°¿òÊı¾İ
+// å¯¹è¯æ¡†æ•°æ®
 	enum { IDD = IDD_GITDEMO_DIALOG };
 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV Ö§³Ö
+	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV æ”¯æŒ
 
-// ÊµÏÖ
+// å®ç°
 protected:
 	HICON m_hIcon;
 
-	// Éú³ÉµÄÏûÏ¢Ó³Éäº¯Êı
+	// ç”Ÿæˆçš„æ¶ˆæ¯æ˜ å°„å‡½æ•°
 	virtual BOOL OnInitDialog();
 	//afx_msg LRESULT OnReceiveData(WPARAM wParam, LPARAM lParam);
 	afx_msg void OnSysCommand(UINT nID, LPARAM lParam);
@@ -43,7 +43,7 @@ public:
 	SapBuffer		*m_Buffers_1;
 	SapTransfer		*m_Xfer_1;
 	SapView        *m_View_1;
-		//´æ´¢Â·¾¶
+		//å­˜å‚¨è·¯å¾„
 	CString m_strStoragePath;
 	CString m_strLeftPath;
 	CString m_strRightPath;
